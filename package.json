@@ -1,0 +1,31 @@
+{
+  "name": "course-studport",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "next dev",
+    "dev:backend": "cd ../backend && npm run dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emailjs/browser": "^4.4.1",
+    "lucide-react": "^0.330.0",
+    "next": "14.1.0",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-is": "^19.2.4",
+    "react-player": "^3.4.0",
+    "react-youtube": "^10.1.0",
+    "recharts": "^3.7.0",
+    "save": "^2.9.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.0.1",
+    "concurrently": "^9.2.1",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0"
+  }
+}

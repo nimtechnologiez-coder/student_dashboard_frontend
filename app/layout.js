@@ -6,6 +6,9 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata = {
     title: 'Nim student Course Page',
     description: 'Course enrollment page',
+    icons: {
+        icon: '/Nim Academy.png', // Assuming it's in public folder
+    },
 }
 
 export default function RootLayout({ children }) {

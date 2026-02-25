@@ -40,6 +40,10 @@ const LoginPage = () => {
                 setStatus('success');
                 // Store user data in localStorage (User session)
                 localStorage.setItem('user', JSON.stringify(data.user));
+                localStorage.setItem('token', data.token);
+
+                // Set cookie for Next.js middleware
+                document.cookie = `user=${JSON.stringify(data.user)}; path=/; max-age=2592000`; // 30 days
 
                 setTimeout(() => {
                     router.push('/'); // Redirect to Home/Dashboard

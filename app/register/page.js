@@ -94,9 +94,9 @@ const RegisterPage = () => {
                         const data = await response.json();
                         console.log('Registration Successful:', data);
 
-                        // AUTO-LOGIN: Save user data to localStorage
-                        // Logic matches login page structure (but register returns flat object)
-                        localStorage.setItem('user', JSON.stringify(data));
+                        // AUTO-LOGIN: Save user data and token to localStorage
+                        localStorage.setItem('user', JSON.stringify(data.user));
+                        localStorage.setItem('token', data.token);
 
                         setStep(3); // Move to Success directly (skipping Phone OTP)
                     } else {

@@ -771,7 +771,7 @@ const NewLandingPage = () => {
                             <h3>Team Plan</h3>
                             <p className="sub-text">👥 2 to 50 people – For your team</p>
 
-                            <button className="outline-btn">Start subscription</button>
+                            <button className="outline-btn" onClick={() => router.push('/subscription')}>Start subscription</button>
 
                             <div className="divider"></div>
 
@@ -797,7 +797,7 @@ const NewLandingPage = () => {
                                 👥 More than 20 people – For your whole organization
                             </p>
 
-                            <button className="outline-btn">Request a demo</button>
+                            <button className="outline-btn" onClick={() => router.push('/demo')}>Request a demo</button>
 
                             <div className="divider"></div>
 
@@ -1182,7 +1182,7 @@ const NewLandingPage = () => {
                     <div className="footer-contact">
                         <h3>Get in Touch</h3>
 
-                        <p>📧 nimacademy@gmail.com</p>
+                        <p>📧 contactnimacademy@gmail.com</p>
                         <p>📞 +91 7418855108</p>
                         <p>📍 Nagercoil, Tamil Nadu 629170</p>
                     </div>

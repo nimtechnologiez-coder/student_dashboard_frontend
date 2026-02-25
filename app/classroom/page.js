@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Play, CheckCircle, Lock, ChevronDown, ChevronUp, ArrowLeft, Menu, X } from 'lucide-react';
+import { Play, CheckCircle, Lock, ChevronDown, ChevronUp, ArrowLeft, Menu, X, HelpCircle, Trophy } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
 // Dynamically import ReactPlayer to avoid SSR issues
@@ -22,6 +22,24 @@ const ClassroomContent = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true); // For mobile/desktop toggle
     const [videoUrlToPlay, setVideoUrlToPlay] = useState('');
 
+    // Quiz State
+    const [isQuizActive, setIsQuizActive] = useState(false);
+    const [quizModuleIndex, setQuizModuleIndex] = useState(-1);
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const [quizAnswers, setQuizAnswers] = useState({});
+    const [quizResults, setQuizResults] = useState(null);
+
+    const isModuleFinished = (module) => {
+        if (!module || !module.lectures) return false;
+        return module.lectures.every(lecture => completedLectures.includes(lecture.title));
+    };
+
+    const resetQuiz = () => {
+        setCurrentQuestionIndex(0);
+        setQuizAnswers({});
+        setQuizResults(null);
+    };
+
     useEffect(() => {
         const currentModule = course?.curriculum?.[activeModuleIndex];
         const currentLecture = currentModule?.lectures?.[activeLectureIndex];
@@ -40,7 +58,10 @@ const ClassroomContent = () => {
 
             // It's an S3 Key, fetch signed URL
             try {
-                const res = await fetch(`http://localhost:5000/api/s3/view-url?key=${currentLecture.videoUrl}`);
+                const token = localStorage.getItem('token');
+                const res = await fetch(`http://localhost:5000/api/s3/view-url?key=${currentLecture.videoUrl}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
                 if (res.ok) {
                     const data = await res.json();
                     setVideoUrlToPlay(data.url);
@@ -69,9 +90,12 @@ const ClassroomContent = () => {
                     return;
                 }
                 const parsedUser = JSON.parse(storedUser);
+                const token = localStorage.getItem('token');
 
                 // Fetch fresh user data to get enrollment status
-                const userRes = await fetch(`http://localhost:5000/api/users/${parsedUser.id || parsedUser._id}`);
+                const userRes = await fetch(`http://localhost:5000/api/users/${parsedUser.id || parsedUser._id}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
                 let userData = parsedUser;
                 if (userRes.ok) {
                     userData = await userRes.json();
@@ -122,9 +146,13 @@ const ClassroomContent = () => {
         if (completedLectures.includes(lectureId)) return; // Already completed
 
         try {
+            const token = localStorage.getItem('token');
             const res = await fetch('http://localhost:5000/api/progress', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify({
                     userId: user._id,
                     courseId: course._id,
@@ -224,7 +252,161 @@ const ClassroomContent = () => {
 
                 {/* --- Main Content Area (Video) --- */}
                 <main className="flex-1 flex flex-col overflow-y-auto bg-[#02040a] relative">
-                    {currentLecture ? (
+                    {isQuizActive ? (
+                        <div className="flex-1 flex flex-col p-6 items-center">
+                            <div className="max-w-3xl w-full bg-[#0a0f1a] border border-white/10 rounded-2xl overflow-hidden flex flex-col h-full max-h-[600px]">
+                                {/* Quiz Header */}
+                                <div className="p-6 border-b border-white/10 flex justify-between items-center bg-white/5">
+                                    <div>
+                                        <h2 className="text-xl font-bold text-white">Module {quizModuleIndex + 1} Quiz</h2>
+                                        <p className="text-sm text-gray-400">{course.curriculum[quizModuleIndex].title}</p>
+                                    </div>
+                                    <button
+                                        onClick={() => setIsQuizActive(false)}
+                                        className="text-gray-500 hover:text-white transition-colors"
+                                    >
+                                        <X size={24} />
+                                    </button>
+                                </div>
+
+                                {/* Quiz Body */}
+                                <div className="flex-1 overflow-y-auto p-8">
+                                    {quizResults ? (
+                                        <div className="flex flex-col items-center justify-center h-full text-center space-y-6">
+                                            <div className="w-20 h-20 bg-[#A3D861]/20 rounded-full flex items-center justify-center text-[#A3D861]">
+                                                <Trophy size={40} />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-2xl font-black text-white">Quiz Completed!</h3>
+                                                <p className="text-gray-400 mt-2">You scored {quizResults.score} out of {quizResults.total}</p>
+                                            </div>
+                                            <div className="text-5xl font-black text-[#A3D861]">{quizResults.percentage}%</div>
+                                            <div className="flex gap-4 w-full max-w-sm pt-4">
+                                                <button
+                                                    onClick={resetQuiz}
+                                                    className="flex-1 py-3 bg-white/5 border border-white/10 text-white rounded-xl font-bold hover:bg-white/10 transition-all"
+                                                >
+                                                    Retake Quiz
+                                                </button>
+                                                <button
+                                                    onClick={() => setIsQuizActive(false)}
+                                                    className="flex-1 py-3 bg-[#A3D861] text-black rounded-xl font-bold hover:bg-[#A3D861]/90 transition-all"
+                                                >
+                                                    Back to Class
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="space-y-8">
+                                            {/* Progress Indicator */}
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Question {currentQuestionIndex + 1} of {course.curriculum[quizModuleIndex].quiz.length}</span>
+                                                <div className="flex-1 h-1.5 bg-white/10 rounded-full mx-4 overflow-hidden">
+                                                    <div
+                                                        className="h-full bg-[#A3D861] transition-all duration-300"
+                                                        style={{ width: `${((currentQuestionIndex + 1) / course.curriculum[quizModuleIndex].quiz.length) * 100}%` }}
+                                                    ></div>
+                                                </div>
+                                            </div>
+
+                                            {/* Question */}
+                                            <h3 className="text-xl font-bold text-white leading-relaxed">
+                                                {course.curriculum[quizModuleIndex].quiz[currentQuestionIndex].question}
+                                            </h3>
+
+                                            {/* Options */}
+                                            <div className="grid grid-cols-1 gap-3">
+                                                {course.curriculum[quizModuleIndex].quiz[currentQuestionIndex].options.map((option, idx) => (
+                                                    <button
+                                                        key={idx}
+                                                        onClick={() => setQuizAnswers({ ...quizAnswers, [currentQuestionIndex]: idx })}
+                                                        className={`p-4 rounded-xl text-left font-medium transition-all border-2 ${quizAnswers[currentQuestionIndex] === idx
+                                                            ? 'bg-[#A3D861]/10 border-[#A3D861] text-[#A3D861]'
+                                                            : 'bg-white/5 border-transparent hover:bg-white/10 text-gray-300'
+                                                            }`}
+                                                    >
+                                                        <div className="flex items-center gap-3">
+                                                            <div className={`w-6 h-6 rounded-full border flex items-center justify-center text-xs ${quizAnswers[currentQuestionIndex] === idx ? 'border-[#A3D861] bg-[#A3D861] text-black' : 'border-gray-600'
+                                                                }`}>
+                                                                {String.fromCharCode(65 + idx)}
+                                                            </div>
+                                                            {option}
+                                                        </div>
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Quiz Footer */}
+                                {!quizResults && (
+                                    <div className="p-6 border-t border-white/10 flex justify-between items-center bg-white/5">
+                                        <button
+                                            onClick={() => setCurrentQuestionIndex(curr => curr - 1)}
+                                            disabled={currentQuestionIndex === 0}
+                                            className="px-6 py-2 text-gray-400 hover:text-white disabled:opacity-0 transition-colors"
+                                        >
+                                            Previous
+                                        </button>
+
+                                        {currentQuestionIndex === course.curriculum[quizModuleIndex].quiz.length - 1 ? (
+                                            <button
+                                                onClick={async () => {
+                                                    const quiz = course.curriculum[quizModuleIndex].quiz;
+                                                    let score = 0;
+                                                    quiz.forEach((q, idx) => {
+                                                        if (quizAnswers[idx] === q.correctAnswer) score++;
+                                                    });
+
+                                                    setQuizResults({
+                                                        score,
+                                                        total: quiz.length,
+                                                        percentage: Math.round((score / quiz.length) * 100)
+                                                    });
+
+                                                    // Log Gamification Activity
+                                                    try {
+                                                        const token = localStorage.getItem('token');
+                                                        await fetch('http://localhost:5000/api/gamification/log-activity', {
+                                                            method: 'POST',
+                                                            headers: {
+                                                                'Content-Type': 'application/json',
+                                                                'Authorization': `Bearer ${token}`
+                                                            },
+                                                            body: JSON.stringify({
+                                                                email: user.email,
+                                                                type: 'quiz_complete',
+                                                                metadata: {
+                                                                    courseId: course._id,
+                                                                    quizModuleIndex,
+                                                                    quizScore: score
+                                                                }
+                                                            })
+                                                        });
+                                                    } catch (err) {
+                                                        console.error("Failed to log gamification activity:", err);
+                                                    }
+                                                }}
+                                                disabled={quizAnswers[currentQuestionIndex] === undefined}
+                                                className="px-8 py-3 bg-[#A3D861] text-black font-bold rounded-xl hover:bg-[#A3D861]/90 disabled:opacity-50 transition-all"
+                                            >
+                                                Submit Quiz
+                                            </button>
+                                        ) : (
+                                            <button
+                                                onClick={() => setCurrentQuestionIndex(curr => curr + 1)}
+                                                disabled={quizAnswers[currentQuestionIndex] === undefined}
+                                                className="px-8 py-3 bg-[#A3D861] text-black font-bold rounded-xl hover:bg-[#A3D861]/90 disabled:opacity-50 transition-all"
+                                            >
+                                                Next Question
+                                            </button>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    ) : currentLecture ? (
                         <>
                             {/* Video Player Container */}
                             <div className="w-full aspect-video bg-black relative shadow-2xl">
@@ -337,6 +519,7 @@ const ClassroomContent = () => {
                                                 onClick={() => {
                                                     setActiveModuleIndex(mIndex);
                                                     setActiveLectureIndex(lIndex);
+                                                    setIsQuizActive(false);
                                                     // On mobile, close sidebar on select
                                                     if (window.innerWidth < 768) setIsSidebarOpen(false);
                                                 }}
@@ -361,14 +544,48 @@ const ClassroomContent = () => {
                                             </div>
                                         );
                                     })}
+                                    {/* Practice Quiz Link */}
+                                    {module.quiz && module.quiz.length > 0 && (
+                                        <div
+                                            onClick={() => {
+                                                if (isModuleFinished(module)) {
+                                                    setQuizModuleIndex(mIndex);
+                                                    setIsQuizActive(true);
+                                                    resetQuiz();
+                                                    if (window.innerWidth < 768) setIsSidebarOpen(false);
+                                                }
+                                            }}
+                                            className={`p-4 pl-6 flex items-start gap-3 transition-all border-l-4 ${isQuizActive && quizModuleIndex === mIndex
+                                                ? 'bg-[#A3D861]/10 border-[#A3D861]'
+                                                : isModuleFinished(module)
+                                                    ? 'bg-transparent border-transparent hover:bg-white/5 cursor-pointer text-[#A3D861]'
+                                                    : 'bg-transparent border-transparent opacity-50 cursor-not-allowed'
+                                                }`}
+                                        >
+                                            <div className="mt-0.5">
+                                                <HelpCircle size={16} className={isQuizActive && quizModuleIndex === mIndex ? 'text-[#A3D861]' : 'text-gray-500'} />
+                                            </div>
+                                            <div className="flex-1">
+                                                <div className="flex justify-between items-center">
+                                                    <p className={`text-sm font-bold ${isQuizActive && quizModuleIndex === mIndex ? 'text-[#A3D861]' : 'text-gray-300'}`}>
+                                                        Practice Quiz
+                                                    </p>
+                                                    {!isModuleFinished(module) && <Lock size={12} className="text-gray-500" />}
+                                                </div>
+                                                <p className="text-[10px] text-gray-500 mt-0.5">
+                                                    {isModuleFinished(module) ? 'Available' : 'Finish module to unlock'}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         ))}
                     </div>
                 </aside>
 
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 

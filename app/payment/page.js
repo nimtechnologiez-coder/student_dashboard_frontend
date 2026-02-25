@@ -43,7 +43,10 @@ const PaymentContent = () => {
         // Fetch Courses
         const fetchCourses = async () => {
             try {
-                const res = await fetch('http://localhost:5000/api/courses');
+                const token = localStorage.getItem('token');
+                const res = await fetch('http://localhost:5000/api/courses', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
                 if (res.ok) {
                     const data = await res.json();
                     setCourses(data);
@@ -83,9 +86,13 @@ const PaymentContent = () => {
         if (!couponCode) return;
         setCouponError('');
         try {
+            const token = localStorage.getItem('token');
             const res = await fetch('http://localhost:5000/api/coupons/validate', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify({ code: couponCode, orderAmount: coursePrice })
             });
             const data = await res.json();
@@ -122,9 +129,13 @@ const PaymentContent = () => {
 
         // 2. Call Enroll API
         try {
+            const token = localStorage.getItem('token');
             const res = await fetch('http://localhost:5000/api/enroll', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify({
                     userId: currentUser.id || currentUser._id, // Handle both formats
                     courseId: selectedCourse._id,

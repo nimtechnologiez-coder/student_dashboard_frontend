@@ -61,7 +61,10 @@ const CoursePage = () => {
                 return;
             }
             try {
-                const res = await fetch(`http://localhost:5000/api/s3/view-url?key=${selectedCourse.videoLink}`);
+                const token = localStorage.getItem('token');
+                const res = await fetch(`http://localhost:5000/api/s3/view-url?key=${selectedCourse.videoLink}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
                 if (res.ok) {
                     const data = await res.json();
                     setPreviewUrl(data.url);
@@ -104,7 +107,10 @@ const CoursePage = () => {
 
                 // Background update for latest data (e.g. enrollments)
                 try {
-                    const res = await fetch(`http://localhost:5000/api/users/${parsedUser.id}`);
+                    const token = localStorage.getItem('token');
+                    const res = await fetch(`http://localhost:5000/api/users/${parsedUser.id}`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
                     if (res.ok) {
                         const userData = await res.json();
                         setUser(userData);
@@ -153,16 +159,22 @@ const CoursePage = () => {
         if (!selectedCourse) return;
 
         try {
+            const token = localStorage.getItem('token');
             const res = await fetch('http://localhost:5000/api/enroll', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify({ userId: user._id, courseId: selectedCourse._id })
             });
             const data = await res.json();
             if (res.ok) {
                 alert('Enrollment Successful!');
                 // Refresh user data to update UI
-                const userRes = await fetch(`http://localhost:5000/api/users/${user._id}`);
+                const userRes = await fetch(`http://localhost:5000/api/users/${user._id}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
                 if (userRes.ok) {
                     const userData = await userRes.json();
                     setUser(userData);
@@ -587,9 +599,13 @@ const CoursePage = () => {
                                                             if (!isEnrolled) return;
 
                                                             try {
+                                                                const token = localStorage.getItem('token');
                                                                 const res = await fetch('http://localhost:5000/api/progress', {
                                                                     method: 'POST',
-                                                                    headers: { 'Content-Type': 'application/json' },
+                                                                    headers: {
+                                                                        'Content-Type': 'application/json',
+                                                                        'Authorization': `Bearer ${token}`
+                                                                    },
                                                                     body: JSON.stringify({
                                                                         userId: user._id,
                                                                         courseId: courseData._id,
@@ -600,7 +616,9 @@ const CoursePage = () => {
                                                                 if (res.ok) {
                                                                     // Update local state - trigger re-fetch or manual update
                                                                     // Simple re-fetch user to get updated progress
-                                                                    const updatedUserRes = await fetch(`http://localhost:5000/api/users/${user._id}`);
+                                                                    const updatedUserRes = await fetch(`http://localhost:5000/api/users/${user._id}`, {
+                                                                        headers: { 'Authorization': `Bearer ${token}` }
+                                                                    });
                                                                     const updatedUser = await updatedUserRes.json();
                                                                     setUser(updatedUser);
                                                                     localStorage.setItem('user', JSON.stringify(updatedUser)); // Keep synced

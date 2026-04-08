@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -19,7 +19,7 @@ const categories = [
     "Amazon AWS"
 ];
 
-/* your allCourses object — unchanged */
+/* your allCourses object â€” unchanged */
 const allCourses = {
     "Artificial Intelligence (AI)": [
         {
@@ -46,7 +46,7 @@ const allCourses = {
         },
         {
             id: 3,
-            title: "Machine Learning A–Z",
+            title: "Machine Learning Aâ€“Z",
             instructor: "SuperDataScience",
             rating: 4.5,
             reviews: 33871,
@@ -303,7 +303,7 @@ const allCourses = {
         }
     ]
 };
-/* ✅ KEEP YOUR SAME DATA HERE (no change) */
+/* âœ… KEEP YOUR SAME DATA HERE (no change) */
 
 const NewLandingPage = () => {
     const router = useRouter(); // Changed from navigate to router
@@ -340,7 +340,7 @@ const NewLandingPage = () => {
                 </div>
 
                 <div className="udemy-search">
-                    <span>🔍</span>
+                    <span>ðŸ”</span>
                     <input
                         type="text"
                         placeholder="Search for anything"
@@ -373,7 +373,7 @@ const NewLandingPage = () => {
 
                 {/* HAMBURGER */}
                 <div className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
-                    ☰
+                    â˜°
                 </div>
 
                 {/* MOBILE MENU */}
@@ -396,7 +396,7 @@ const NewLandingPage = () => {
                             <button className="signup-btn" onClick={() => router.push('/register')}>Sign up</button>
                         </>
                     )}
-                    <button className="globe">🌐</button>
+                    <button className="globe">ðŸŒ</button>
                 </div>
 
             </nav>
@@ -491,15 +491,15 @@ const NewLandingPage = () => {
                                 <p className="instructor">{course.instructor}</p>
 
                                 <div className="rating">
-                                    ⭐ {course.rating}
+                                    â­ {course.rating}
                                     <span> ({course.reviews})</span>
                                 </div>
 
                                 {course.tag && <span className="tag">{course.tag}</span>}
 
                                 <div className="price">
-                                    ₹{course.price}
-                                    <span>₹{course.oldPrice}</span>
+                                    â‚¹{course.price}
+                                    <span>â‚¹{course.oldPrice}</span>
                                 </div>
                             </div>
                         </div>
@@ -513,7 +513,7 @@ const NewLandingPage = () => {
                     className="show-all"
                     onClick={() => router.push("/courses")}
                 >
-                    Show all {activeCategory} courses →
+                    Show all {activeCategory} courses â†’
                 </span>
 
             </section>
@@ -537,15 +537,15 @@ const NewLandingPage = () => {
                     {/* CARD 1 */}
                     <div className="format-card">
                         <div className="card-top beige">
-                            <span className="icon">📘</span>
+                            <span className="icon">ðŸ“˜</span>
                             <h3>Individual Courses</h3>
                             <p>Learn job-ready skills anytime, anywhere.</p>
                         </div>
 
                         <div className="card-bottom">
-                            <p>⏱ 4-8 weeks</p>
-                            <p>🎓 Industry-recognized certificate</p>
-                            <p>🛠 Hands-on projects</p>
+                            <p>â± 4-8 weeks</p>
+                            <p>ðŸŽ“ Industry-recognized certificate</p>
+                            <p>ðŸ›  Hands-on projects</p>
 
                             <button onClick={() => router.push("/courses")}>
                                 Explore courses
@@ -556,15 +556,15 @@ const NewLandingPage = () => {
                     {/* CARD 2 */}
                     <div className="format-card">
                         <div className="card-top beige">
-                            <span className="icon">📜</span>
+                            <span className="icon">ðŸ“œ</span>
                             <h3>Certificate Programs</h3>
                             <p>Build expertise with structured learning paths.</p>
                         </div>
 
                         <div className="card-bottom">
-                            <p>⏱ 8-12 weeks</p>
-                            <p>🎓 Multiple certifications</p>
-                            <p>📊 Portfolio development</p>
+                            <p>â± 8-12 weeks</p>
+                            <p>ðŸŽ“ Multiple certifications</p>
+                            <p>ðŸ“Š Portfolio development</p>
 
                             <button onClick={() => router.push("/courses")}>
                                 Explore programs
@@ -575,15 +575,15 @@ const NewLandingPage = () => {
                     {/* CARD 3 */}
                     <div className="format-card">
                         <div className="card-top green">
-                            <span className="icon">🌐</span>
+                            <span className="icon">ðŸŒ</span>
                             <h3>Career Tracks</h3>
                             <p>Master in-demand technologies with mentorship.</p>
                         </div>
 
                         <div className="card-bottom">
-                            <p>⏱ 12-24 weeks</p>
-                            <p>💼 Placement support</p>
-                            <p>🚀 Real-world projects</p>
+                            <p>â± 12-24 weeks</p>
+                            <p>ðŸ’¼ Placement support</p>
+                            <p>ðŸš€ Real-world projects</p>
 
                             <button onClick={() => router.push("/courses")}>
                                 Explore tracks
@@ -594,15 +594,15 @@ const NewLandingPage = () => {
                     {/* CARD 4 */}
                     <div className="format-card">
                         <div className="card-top light">
-                            <span className="icon">🎓</span>
+                            <span className="icon">ðŸŽ“</span>
                             <h3>Advanced Programs</h3>
                             <p>Become a domain expert with real experience.</p>
                         </div>
 
                         <div className="card-bottom">
-                            <p>⏱ 3-6 months</p>
-                            <p>🏆 Capstone projects</p>
-                            <p>🤝 Internship opportunities</p>
+                            <p>â± 3-6 months</p>
+                            <p>ðŸ† Capstone projects</p>
+                            <p>ðŸ¤ Internship opportunities</p>
 
                             <button onClick={() => router.push("/courses")}>
                                 Explore training
@@ -624,7 +624,7 @@ const NewLandingPage = () => {
                 <div className="why-grid">
 
                     <div className="why-card">
-                        <div className="why-icon">🎯</div>
+                        <div className="why-icon">ðŸŽ¯</div>
                         <h3>Personalized learning</h3>
                         <p>
                             Learn at your own pace with structured paths, smart recommendations,
@@ -633,7 +633,7 @@ const NewLandingPage = () => {
                     </div>
 
                     <div className="why-card">
-                        <div className="why-icon">📚</div>
+                        <div className="why-icon">ðŸ“š</div>
                         <h3>Industry-ready content</h3>
                         <p>
                             Courses designed by experts covering Full Stack, AI, Data Science,
@@ -642,7 +642,7 @@ const NewLandingPage = () => {
                     </div>
 
                     <div className="why-card">
-                        <div className="why-icon">🚀</div>
+                        <div className="why-icon">ðŸš€</div>
                         <h3>Career acceleration</h3>
                         <p>
                             Get certification, build portfolio projects, and prepare for
@@ -667,10 +667,10 @@ const NewLandingPage = () => {
                         </p>
 
                         <div className="ai-features">
-                            <div>✨ Learn AI and more</div>
-                            <div>🏆 Prep for certification</div>
-                            <div>🤖 Practice with AI coaching</div>
-                            <div>💡 Advance your career</div>
+                            <div>âœ¨ Learn AI and more</div>
+                            <div>ðŸ† Prep for certification</div>
+                            <div>ðŸ¤– Practice with AI coaching</div>
+                            <div>ðŸ’¡ Advance your career</div>
                         </div>
 
                         <button
@@ -680,7 +680,7 @@ const NewLandingPage = () => {
                             Learn more
                         </button>
 
-                        {/* <p className="ai-price">Starting at ₹500/month</p> */}
+                        {/* <p className="ai-price">Starting at â‚¹500/month</p> */}
                     </div>
 
                     <div className="ai-hero-right">
@@ -702,20 +702,20 @@ const NewLandingPage = () => {
 
                     <div className="experience-col">
                         <div className="experience-item">
-                            <span className="check">✔</span>
+                            <span className="check">âœ”</span>
                             <div>
                                 <h4>We just keep growing. Come and grow too.</h4>
                                 <p>
                                     Choose a learning partner who can work with you to build a
-                                    skills-based organization that’s prepared for now and for the future.
+                                    skills-based organization thatâ€™s prepared for now and for the future.
                                 </p>
                             </div>
                         </div>
 
                         <div className="experience-item">
-                            <span className="check">✔</span>
+                            <span className="check">âœ”</span>
                             <div>
-                                <h4>Skills for everyone — from tech to exec teams.</h4>
+                                <h4>Skills for everyone â€” from tech to exec teams.</h4>
                                 <p>
                                     Help teams across your entire organization expand their potential
                                     with courses in tech, business, leadership, wellness, and more.
@@ -726,9 +726,9 @@ const NewLandingPage = () => {
 
                     <div className="experience-col">
                         <div className="experience-item">
-                            <span className="check">✔</span>
+                            <span className="check">âœ”</span>
                             <div>
-                                <h4>Don’t just keep up — set the pace with NimAcademy.</h4>
+                                <h4>Donâ€™t just keep up â€” set the pace with NimAcademy.</h4>
                                 <p>
                                     Outdated training holding you back? We deliver content on the latest
                                     skills as they emerge, including new offerings in GenAI.
@@ -737,7 +737,7 @@ const NewLandingPage = () => {
                         </div>
 
                         <div className="experience-item">
-                            <span className="check">✔</span>
+                            <span className="check">âœ”</span>
                             <div>
                                 <h4>Learning that fits your needs (and your budget).</h4>
                                 <p>
@@ -769,13 +769,13 @@ const NewLandingPage = () => {
                         <div className="card-top purple"></div>
                         <div className="card-body">
                             <h3>Team Plan</h3>
-                            <p className="sub-text">👥 2 to 50 people – For your team</p>
+                            <p className="sub-text">ðŸ‘¥ 2 to 50 people â€“ For your team</p>
 
                             <button className="outline-btn" onClick={() => router.push('/subscription')}>Start subscription</button>
 
                             <div className="divider"></div>
 
-                            <h4>₹2,000 a month per user</h4>
+                            <h4>â‚¹2,000 a month per user</h4>
                             <p className="billing">Billed annually. Cancel anytime.</p>
 
                             <ul>
@@ -794,7 +794,7 @@ const NewLandingPage = () => {
                         <div className="card-body">
                             <h3>Enterprise Plan</h3>
                             <p className="sub-text">
-                                👥 More than 20 people – For your whole organization
+                                ðŸ‘¥ More than 20 people â€“ For your whole organization
                             </p>
 
                             <button className="outline-btn" onClick={() => router.push('/demo')}>Request a demo</button>
@@ -824,7 +824,7 @@ const NewLandingPage = () => {
                         <div className="card-body">
                             <h3>AI Fluency</h3>
                             <p className="sub-text">
-                                ✨ From AI foundations to Enterprise transformation
+                                âœ¨ From AI foundations to Enterprise transformation
                             </p>
 
                             <button className="outline-btn">Contact Us</button>
@@ -832,7 +832,7 @@ const NewLandingPage = () => {
                             <div className="divider"></div>
 
                             <h4>AI Readiness Collection</h4>
-                            <p className="sub-text">👥 More than 100 people</p>
+                            <p className="sub-text">ðŸ‘¥ More than 100 people</p>
                             <p>
                                 Build org-wide AI fluency fast with 50 curated courses + AI Assistant
                                 to accelerate learning.
@@ -841,7 +841,7 @@ const NewLandingPage = () => {
                             <br />
 
                             <h4>AI Growth Collection</h4>
-                            <p className="sub-text">👥 More than 20 people</p>
+                            <p className="sub-text">ðŸ‘¥ More than 20 people</p>
                             <p>
                                 Scale AI and technical expertise with 800+ specialized courses and
                                 30+ role-specific learning paths in multiple languages.
@@ -868,8 +868,8 @@ const NewLandingPage = () => {
                         </div>
                         <div className="line"></div>
                         <p>
-                            “NimAcademy was the best learning decision I’ve ever made.
-                            Real-world projects helped me gain confidence and land my first job.”
+                            â€œNimAcademy was the best learning decision Iâ€™ve ever made.
+                            Real-world projects helped me gain confidence and land my first job.â€
                         </p>
                     </div>
 
@@ -881,8 +881,8 @@ const NewLandingPage = () => {
                         </div>
                         <div className="line"></div>
                         <p>
-                            “It’s rare that I stick to one platform,
-                            but this is one learning journey I can’t imagine without.”
+                            â€œItâ€™s rare that I stick to one platform,
+                            but this is one learning journey I canâ€™t imagine without.â€
                         </p>
                     </div>
 
@@ -894,8 +894,8 @@ const NewLandingPage = () => {
                         </div>
                         <div className="line"></div>
                         <p>
-                            “I love that NimAcademy connects learners where we grow together
-                            and support each other in our career journey.”
+                            â€œI love that NimAcademy connects learners where we grow together
+                            and support each other in our career journey.â€
                         </p>
                     </div>
 
@@ -907,8 +907,8 @@ const NewLandingPage = () => {
                         </div>
                         <div className="line"></div>
                         <p>
-                            “NimAcademy helped me level up my skills while exploring
-                            industry-ready learning paths and expert mentorship.”
+                            â€œNimAcademy helped me level up my skills while exploring
+                            industry-ready learning paths and expert mentorship.â€
                         </p>
                     </div>
 
@@ -982,7 +982,7 @@ const NewLandingPage = () => {
                         </button>
 
                         <div className="trust">
-                            ⭐ 10,000+ Learners • 🎓 Expert Mentors • 💼 Job-Ready Skills
+                            â­ 10,000+ Learners â€¢ ðŸŽ“ Expert Mentors â€¢ ðŸ’¼ Job-Ready Skills
                         </div>
                     </div>
                 </div>
@@ -1130,7 +1130,7 @@ const NewLandingPage = () => {
                     {/* LEFT LOGO AREA */}
                     <div className="footer-logos">
                         <img
-                            src="data:image/png;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCABSAKADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWFlcZGVnZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/9oADAMBAAIRAxAPwD3aSQscA8Ko6KKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKkjkKnBOQajooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiijBPQUAFFFFABRRRQAVBeXS2Vo9y8csipyViXc2PX6DvU9ZXiC2vrvS2hsGO9jteMbRvU8EEnp+HNZVpSjTlKKu7GlGMZVIxk7K5kW/ia/k+wo1oxkmkLPsgY7ou2znk+p6Vqz63L/aM9jY6fJdy24HmnzVjAz6Z61T0/RtQh1tZ5rk+RaxrFC3lp+8THK4H3R79TTdW0+e5v5Xk0GC8Q8RTR3PlOOP4uRk15sZYqNK7bvftrZLyUt35HpSjhpVbJK1u+l2/Nx2XmP17V7630iGuaC2ntXlwWkcKfK5+6Rzyf84q1Nr32SySW6sZ4p5JPLit8hmkOBzx25qnJomoTeERp8swe7VxIoZsgAHhM/T8O3SnXlpq9/HZ3v2SK3vrKXKQmUMsi4HcdDkdD+dNzxKbkr6pWVr+vzW9upKjh2lF20b1vb0+T28iSTxHLbSwQ3mlT28k0gRMyAqQTjOcdRkcUN4jle4uYLXSbi5kt5GR9jcYBxnp1OOlVr+31vVpbJ5dPjtore4VynnqzHnls9MAduvNaOi2NxZ3GqPOgVbi6MkfzA5Xnnjp+NOE8TOpypvl7uNunp38hShh4U+Zpc3ZSv19e3mUtZ1fULe809IbaaJZHUsvynzc4Jj9iOmavnWWS70+2mspIpbzd8rOMx49fWo9esbq6+w3FmqSS2k/m+Wzbd447/hUGoWmp3f9nanFbRx31qzFrZpAQQT2bp0/n7VUnXp1JtNvZrTppe2m++hMVQnCCaS3vrrfW19dttfkX7zVVtNстрIwszTxu4cNgLtBOMfhWbB4oku7fzrXR7qZFH7wq3C+w4+Y45qOW01a71e21C7tYoYYYpFKLKGKDaep75J7VT8Oza1b6JGLKyhuYZCxjcyBTG2cHIJGRkZ/rWU8TWdXl1Sd7e7d2SjbS3dv+ttI4eiqV9G1a/vaXvLrfsl/W9+81Ky1E6LcRtc7ZLraojk2bW4yHHOfw/PmpI/Er3HnC10q5naF2WQIwwAO+cdT6YqrF4fvLaHSlG2V47w3FwQwAXOOmcZ4HatPw7Y3Gnw3a3KBDJdNIuGBypxzxVUnipVLP3b7u3kv1/yFV+rRp6e9bZX83+gx/EtkNJiv1WR/Nfy0hA+cv3H/ANf3FZGu6rczwWkE9hcWMpuEdSzyZDr0IyMc4inw+H9RTTY2URx3lteNcRI7Aq6nHcfT/wDVTNTk1HWFt/MjsreOGZXKC7jZmPc5zjAHbrz3rCvWxEqTVS6bSsrb979vw+ZrShhqdROLVk3q3t2t3/H5GoNRtLPVdZllM6iAKZCz7lOegVex/GmP4lmitftc2j3MdswzHJvBznpkfwg+tVp9JfVLrXFSWHZc+W0LrIGyV9QCSB26U66XxBfaTJp76dDGdgV5vPU+YB2Udicd/wNK78ZKVOdsPfltdWV7ye997a+n6HmZbGNSleta/M07u1o30a2vp6nQWk4urOC5ClRLGHCk5xkZxU1VtOhe30y0hlG2SOFVYZzggc1ZrrptuCctzOaSk0tgoooqyQooooAKKKKACiiigAooooARgGUqwyCMEe1RWtrBZW629tGI4VztUEnGfrU1FLlV721HzO1ugUUVFc20d3bvBMCY3xkA475oleztuIlwcHg9K57QdOs7rSVlntkkkLsNxz0Bq3/dem/885P+/hq/aWkNjbiCAERgluTk5NcTpVKtWMqsVZJ9b728l2EJb2NraMzW8CRlhhiverFFFdkYxirRVkMKKKKoAopzqUbH5U2gAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACrcYAQYFFFAH//2Q=="
+                            src="data:image/png;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCABSAKADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWFlcZGVnZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/9oADAMBAAIRAxAPwD3aSQscA8Ko6KKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKkjkKnBOQajooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiijBPQUAFFFFABRRRQAVBeXS2Vo9y8csipyViXc2PX6DvU9ZXiC2vrvS2hsGO9jteMbRvU8EEnp+HNZVpSjTlKKu7GlGMZVIxk7K5kW/ia/k+wo1oxkmkLPsgY7ou2znk+p6Vqz63L/aM9jY6fJdy24HmnzVjAz6Z61T0/RtQh1tZ5rk+RaxrFC3lp+8THK4H3R79TTdW0+e5v5Xk0GC8Q8RTR3PlOOP4uRk15sZYqNK7bvftrZLyUt35HpSjhpVbJK1u+l2/Nx2XmP17V7630iGuaC2ntXlwWkcKfK5+6Rzyf84q1Nr32SySW6sZ4p5JPLit8hmkOBzx25qnJomoTeERp8swe7VxIoZsgAHhM/T8O3SnXlpq9/HZ3v2SK3vrKXKQmUMsi4HcdDkdD+dNzxKbkr6pWVr+vzW9upKjh2lF20b1vb0+T28iSTxHLbSwQ3mlT28k0gRMyAqQTjOcdRkcUN4jle4uYLXSbi5kt5GR9jcYBxnp1OOlVr+31vVpbJ5dPjtore4VynnqzHnls9MAduvNaOi2NxZ3GqPOgVbi6MkfzA5Xnnjp+NOE8TOpypvl7uNunp38hShh4U+Zpc3ZSv19e3mUtZ1fULe809IbaaJZHUsvynzc4Jj9iOmavnWWS70+2mspIpbzd8rOMx49fWo9esbq6+w3FmqSS2k/m+Wzbd447/hUGoWmp3f9nanFbRx31qzFrZpAQQT2bp0/n7VUnXp1JtNvZrTppe2m++hMVQnCCaS3vrrfW19dttfkX7zVVtNÑÑ‚Ñ€IwszTxu4cNgLtBOMfhWbB4oku7fzrXR7qZFH7wq3C+w4+Y45qOW01a71e21C7tYoYYYpFKLKGKDaep75J7VT8Oza1b6JGLKyhuYZCxjcyBTG2cHIJGRkZ/rWU8TWdXl1Sd7e7d2SjbS3dv+ttI4eiqV9G1a/vaXvLrfsl/W9+81Ky1E6LcRtc7ZLraojk2bW4yHHOfw/PmpI/Er3HnC10q5naF2WQIwwAO+cdT6YqrF4fvLaHSlG2V47w3FwQwAXOOmcZ4HatPw7Y3Gnw3a3KBDJdNIuGBypxzxVUnipVLP3b7u3kv1/yFV+rRp6e9bZX83+gx/EtkNJiv1WR/Nfy0hA+cv3H/ANf3FZGu6rczwWkE9hcWMpuEdSzyZDr0IyMc4inw+H9RTTY2URx3lteNcRI7Aq6nHcfT/wDVTNTk1HWFt/MjsreOGZXKC7jZmPc5zjAHbrz3rCvWxEqTVS6bSsrb979vw+ZrShhqdROLVk3q3t2t3/H5GoNRtLPVdZllM6iAKZCz7lOegVex/GmP4lmitftc2j3MdswzHJvBznpkfwg+tVp9JfVLrXFSWHZc+W0LrIGyV9QCSB26U66XxBfaTJp76dDGdgV5vPU+YB2Udicd/wNK78ZKVOdsPfltdWV7ye997a+n6HmZbGNSleta/M07u1o30a2vp6nQWk4urOC5ClRLGHCk5xkZxU1VtOhe30y0hlG2SOFVYZzggc1ZrrptuCctzOaSk0tgoooqyQooooAKKKKACiiigAooooARgGUqwyCMEe1RWtrBZW629tGI4VztUEnGfrU1FLlV721HzO1ugUUVFc20d3bvBMCY3xkA475oleztuIlwcHg9K57QdOs7rSVlntkkkLsNxz0Bq3/dem/885P+/hq/aWkNjbiCAERgluTk5NcTpVKtWMqsVZJ9b728l2EJb2NraMzW8CRlhhiverFFFdkYxirRVkMKKKKoAopzqUbH5U2gAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACrcYAQYFFFAH//2Q=="
                             alt="startup"
                         />
 
@@ -1151,7 +1151,7 @@ const NewLandingPage = () => {
                             Full Stack Development and Data Analytics.
                         </p>
 
-                        {/* ✅ SOCIAL ICON IMAGES */}
+                        {/* âœ… SOCIAL ICON IMAGES */}
                         <div className="footer-socials">
 
                             <a href="https://www.linkedin.com/company/nim-technologies/posts/?feedView=all" target="_blank" rel="noreferrer">
@@ -1182,15 +1182,15 @@ const NewLandingPage = () => {
                     <div className="footer-contact">
                         <h3>Get in Touch</h3>
 
-                        <p>📧 contactnimacademy@gmail.com</p>
-                        <p>📞 +91 7418855108</p>
-                        <p>📍 Nagercoil, Tamil Nadu 629170</p>
+                        <p>ðŸ“§ contactnimacademy@gmail.com</p>
+                        <p>ðŸ“ž +91 7418855108</p>
+                        <p>ðŸ“ Nagercoil, Tamil Nadu 629170</p>
                     </div>
                 </div>
 
                 {/* BOTTOM BAR */}
                 <div className="footer-bottom">
-                    <p>© 2026 NimAcademy. All rights reserved.</p>
+                    <p>Â© 2026 NimAcademy. All rights reserved.</p>
 
                     <div className="footer-links">
                         <span>Privacy Policy</span>
@@ -1208,3 +1208,7 @@ const NewLandingPage = () => {
 };
 
 export default NewLandingPage;
+
+
+
+

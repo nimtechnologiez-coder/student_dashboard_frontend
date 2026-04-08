@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState } from 'react';
 import { Mail, Phone, User, ArrowRight, CheckCircle, Smartphone } from 'lucide-react';
@@ -77,7 +77,7 @@ const RegisterPage = () => {
             if (formData.emailOtp === generatedEmailOtp) {
                 // Register immediately after Email verification
                 try {
-                    const response = await fetch('http://localhost:5000/api/register', {
+                    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/register`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -149,7 +149,7 @@ const RegisterPage = () => {
             <div className="form-group">
                 <label><Smartphone size={16} /> Mobile Number</label>
                 <div className="mobile-input">
-                    <span className="flag">🇮🇳 +91</span>
+                    <span className="flag">Ã°Å¸â€¡Â®Ã°Å¸â€¡Â³ +91</span>
                     <input
                         type="tel"
                         name="mobile"
@@ -278,3 +278,7 @@ const RegisterPage = () => {
 };
 
 export default RegisterPage;
+
+
+
+

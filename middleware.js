@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
 
 export function middleware(request) {
     // Current student portal middleware allows all routes
@@ -9,3 +9,7 @@ export function middleware(request) {
 export const config = {
     matcher: [], // No routes matched for now, or add specific student routes to protect
 };
+
+
+
+

@@ -1,4 +1,4 @@
-import NewLandingPage from "../components/NewLandingPage";
+﻿import NewLandingPage from "../components/NewLandingPage";
 // Trigger rebuild
 
 
@@ -9,3 +9,7 @@ export default function Home() {
         </main>
     );
 }
+
+
+
+

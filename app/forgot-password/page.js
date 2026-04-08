@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState } from 'react';
 import { Mail, ArrowRight, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
@@ -19,7 +19,7 @@ const ForgotPasswordPage = () => {
         setSimulatedPassword('');
 
         try {
-            const response = await fetch('http://localhost:5000/api/forgot-password', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/forgot-password', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -109,7 +109,7 @@ const ForgotPasswordPage = () => {
                                 disabled={status === 'loading'}
                                 className="w-full bg-[#A3D861] hover:bg-[#A3D861]/90 text-black font-black text-lg py-3.5 rounded-xl transition-all shadow-lg shadow-[#A3D861]/20 flex items-center justify-center gap-2 disabled:opacity-70"
                             >
-                                {status === 'loading' ? <Loader2 className="animate-spin" /> : 'Reset Password'}
+                                {status === 'loading' ? <Loader2 className="animate-spin" /> : 'Reset Password`}
                             </button>
 
                             <div className="text-center">
@@ -126,3 +126,7 @@ const ForgotPasswordPage = () => {
 };
 
 export default ForgotPasswordPage;
+
+
+
+

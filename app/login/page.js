@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState } from 'react';
 import { Mail, Lock, ArrowRight, Loader2, AlertCircle, Eye, EyeOff } from 'lucide-react';
@@ -26,7 +26,7 @@ const LoginPage = () => {
         setErrorMessage('');
 
         try {
-            const response = await fetch('http://localhost:5000/api/login', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ const LoginPage = () => {
                 setStatus('success');
                 // Store user data in localStorage (User session)
                 localStorage.setItem('user', JSON.stringify(data.user));
-                localStorage.setItem('token', data.token);
+                localStorage.setItem('token`, data.token);
 
                 // Set cookie for Next.js middleware
                 document.cookie = `user=${JSON.stringify(data.user)}; path=/; max-age=2592000`; // 30 days
@@ -118,7 +118,7 @@ const LoginPage = () => {
                                         name="password"
                                         value={formData.password}
                                         onChange={handleChange}
-                                        placeholder="••••••••"
+                                        placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                                         className="w-full bg-[#050a14] border border-white/10 rounded-xl pl-10 pr-12 py-3.5 focus:outline-none focus:border-[#A3D861] focus:ring-1 focus:ring-[#A3D861] transition-all text-white placeholder:text-gray-600"
                                         required
                                     />
@@ -162,3 +162,7 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+
+
+
+

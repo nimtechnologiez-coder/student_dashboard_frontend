@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { MessageCircle, X, Send, User, Bot, Sparkles } from 'lucide-react';
@@ -7,7 +7,7 @@ const ChatBot = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [message, setMessage] = useState('');
     const [chatHistory, setChatHistory] = useState([
-        { role: 'bot', text: 'Hello! 👋 I\'m your Nim Academy assistant. How can I help you today?', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
+        { role: 'bot', text: 'Hello! ðŸ‘‹ I\'m your Nim Academy assistant. How can I help you today?', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
     ]);
     const [isTyping, setIsTyping] = useState(false);
     const messagesEndRef = useRef(null);
@@ -53,7 +53,7 @@ const ChatBot = () => {
         if (lowerInput.includes('course') || lowerInput.includes('learn')) {
             return "We offer a wide range of courses including AI Automation, Python, and Digital Marketing! Check our 'Explore Categories' section above.";
         } else if (lowerInput.includes('price') || lowerInput.includes('cost')) {
-            return "Most of our premium courses are available for as low as ₹519. Check individual course cards for specific pricing.";
+            return "Most of our premium courses are available for as low as â‚¹519. Check individual course cards for specific pricing.";
         } else if (lowerInput.includes('certificate')) {
             return "Yes! You get a certificate of completion for every course you finish at Nim Academy.";
         } else if (lowerInput.includes('hello') || lowerInput.includes('hi')) {
@@ -115,7 +115,7 @@ const ChatBot = () => {
                             </div>
                             <div>
                                 <h3 className="chatbot-title">Nim Assistant</h3>
-                                <p className="chatbot-status">AI Powered • Online</p>
+                                <p className="chatbot-status">AI Powered â€¢ Online</p>
                             </div>
                         </div>
                         <div className="chatbot-header-actions">
@@ -185,3 +185,7 @@ const ChatBot = () => {
 };
 
 export default ChatBot;
+
+
+
+

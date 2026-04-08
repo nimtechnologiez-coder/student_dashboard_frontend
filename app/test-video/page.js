@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import React from 'react';
 import dynamic from 'next/dynamic';
 
@@ -6,7 +6,7 @@ const ReactPlayer = dynamic(() => import('react-player'), { ssr: false });
 
 const TestPage = () => {
     // This is the file I found in uploads: 1771398914133.mp4
-    const url = 'http://localhost:5000/uploads/1771398914133.mp4';
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/uploads/1771398914133.mp4';
 
     return (
         <div style={{ padding: 50 }}>
@@ -24,9 +24,13 @@ const TestPage = () => {
             </div>
             <br />
             <h2>Native Video Tag</h2>
-            <video src={url} controls width="640" height="360" style={{ border: '2px solid blue' }} />
+            <video src={url} controls width="640" height="360" style={{ border: '2px solid blue` }} />
         </div>
     );
 };
 
 export default TestPage;
+
+
+
+

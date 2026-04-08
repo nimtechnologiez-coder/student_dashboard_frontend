@@ -1,4 +1,4 @@
-import { Suspense } from 'react'
+﻿import { Suspense } from 'react'
 import CoursePage from '../../components/course'
 
 export default function Courses() {
@@ -14,3 +14,7 @@ export default function Courses() {
         </main>
     )
 }
+
+
+
+

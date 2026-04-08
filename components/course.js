@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -62,7 +62,7 @@ const CoursePage = () => {
             }
             try {
                 const token = localStorage.getItem('token');
-                const res = await fetch(`http://localhost:5000/api/s3/view-url?key=${selectedCourse.videoLink}`, {
+                const res = await fetch(`process.env.NEXT_PUBLIC_API_URL/api/s3/view-url?key=${selectedCourse.videoLink}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (res.ok) {
@@ -80,8 +80,8 @@ const CoursePage = () => {
         const fetchCourses = async () => {
             try {
                 const [coursesRes, heroRes] = await Promise.all([
-                    fetch('http://localhost:5000/api/courses'),
-                    fetch('http://localhost:5000/api/settings/hero-image')
+                    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/courses`),
+                    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/settings/hero-image')
                 ]);
 
                 if (coursesRes.ok) {
@@ -107,8 +107,8 @@ const CoursePage = () => {
 
                 // Background update for latest data (e.g. enrollments)
                 try {
-                    const token = localStorage.getItem('token');
-                    const res = await fetch(`http://localhost:5000/api/users/${parsedUser.id}`, {
+                    const token = localStorage.getItem('token`);
+                    const res = await fetch(`process.env.NEXT_PUBLIC_API_URL/api/users/${parsedUser.id}`, {
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
                     if (res.ok) {
@@ -160,11 +160,11 @@ const CoursePage = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch('http://localhost:5000/api/enroll', {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/enroll', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    'Authorization`: `Bearer ${token}`
                 },
                 body: JSON.stringify({ userId: user._id, courseId: selectedCourse._id })
             });
@@ -172,7 +172,7 @@ const CoursePage = () => {
             if (res.ok) {
                 alert('Enrollment Successful!');
                 // Refresh user data to update UI
-                const userRes = await fetch(`http://localhost:5000/api/users/${user._id}`, {
+                const userRes = await fetch(`process.env.NEXT_PUBLIC_API_URL/api/users/${user._id}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (userRes.ok) {
@@ -542,7 +542,7 @@ const CoursePage = () => {
                         <div>
                             <h2 className="text-xl lg:text-2xl font-bold text-white mb-4">Course Content</h2>
                             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-sm text-gray-400 mb-4 gap-2">
-                                <span>{courseData.curriculum.length} sections • {courseData.lecturesCount} lectures • {courseData.duration} total length</span>
+                                <span>{courseData.curriculum.length} sections â€¢ {courseData.lecturesCount} lectures â€¢ {courseData.duration} total length</span>
                                 <button className="text-[#0395B2] font-semibold hover:text-[#A3D861] transition-colors text-left sm:text-right">Expand all sections</button>
                             </div>
 
@@ -560,7 +560,7 @@ const CoursePage = () => {
                                                     <span className="font-semibold text-white/90 text-sm lg:text-base">{module.title}</span>
                                                 </div>
                                                 <div className="text-sm text-gray-500 hidden sm:block">
-                                                    {module.lectures.length} lectures • {module.duration}
+                                                    {module.lectures.length} lectures â€¢ {module.duration}
                                                 </div>
                                             </button>
 
@@ -600,11 +600,11 @@ const CoursePage = () => {
 
                                                             try {
                                                                 const token = localStorage.getItem('token');
-                                                                const res = await fetch('http://localhost:5000/api/progress', {
+                                                                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/progress', {
                                                                     method: 'POST',
                                                                     headers: {
                                                                         'Content-Type': 'application/json',
-                                                                        'Authorization': `Bearer ${token}`
+                                                                        'Authorization`: `Bearer ${token}`
                                                                     },
                                                                     body: JSON.stringify({
                                                                         userId: user._id,
@@ -616,7 +616,7 @@ const CoursePage = () => {
                                                                 if (res.ok) {
                                                                     // Update local state - trigger re-fetch or manual update
                                                                     // Simple re-fetch user to get updated progress
-                                                                    const updatedUserRes = await fetch(`http://localhost:5000/api/users/${user._id}`, {
+                                                                    const updatedUserRes = await fetch(`process.env.NEXT_PUBLIC_API_URL/api/users/${user._id}`, {
                                                                         headers: { 'Authorization': `Bearer ${token}` }
                                                                     });
                                                                     const updatedUser = await updatedUserRes.json();
@@ -764,8 +764,8 @@ const CoursePage = () => {
 
                                 <div className="p-5 lg:p-6 space-y-5 lg:space-y-6">
                                     <div className="flex items-baseline gap-3">
-                                        <span className="text-3xl font-black text-white">₹{courseData.price.toString().replace('$', '')}</span>
-                                        <span className="text-lg text-gray-500 line-through">₹{courseData.originalPrice.toString().replace('$', '')}</span>
+                                        <span className="text-3xl font-black text-white">â‚¹{courseData.price.toString().replace('$', '')}</span>
+                                        <span className="text-lg text-gray-500 line-through">â‚¹{courseData.originalPrice.toString().replace('$', '')}</span>
                                         <span className="text-sm font-bold text-[#A3D861]">50% OFF</span>
                                     </div>
 
@@ -932,8 +932,8 @@ function CourseCard({ course, user, router }) {
 
                 <div className="pt-4 border-t border-white/5 flex items-center justify-between">
                     <div className="flex items-baseline gap-2">
-                        <span className="font-bold text-white text-lg">₹{course.price.toString().replace('$', '')}</span>
-                        <span className="text-gray-500 text-xs line-through">₹{course.originalPrice.toString().replace('$', '')}</span>
+                        <span className="font-bold text-white text-lg">â‚¹{course.price.toString().replace('$', '')}</span>
+                        <span className="text-gray-500 text-xs line-through">â‚¹{course.originalPrice.toString().replace('$', '')}</span>
                     </div>
                     <div className="flex items-center gap-3">
                         {course.videoLink && (
@@ -957,3 +957,7 @@ function CourseCard({ course, user, router }) {
 }
 
 export default CoursePage;
+
+
+
+

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import { ShieldCheck, CreditCard, Smartphone, Globe, ArrowRight, CheckCircle, Lock } from 'lucide-react';
@@ -44,8 +44,8 @@ const PaymentContent = () => {
         const fetchCourses = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/courses', {
-                    headers: { 'Authorization`: `Bearer ${token}` }
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/courses`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (res.ok) {
                     const data = await res.json();
@@ -87,11 +87,11 @@ const PaymentContent = () => {
         setCouponError('');
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/coupons/validate', {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/coupons/validate`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization`: `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({ code: couponCode, orderAmount: coursePrice })
             });
@@ -130,11 +130,11 @@ const PaymentContent = () => {
         // 2. Call Enroll API
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/enroll', {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/enroll`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization`: `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
                     userId: currentUser.id || currentUser._id, // Handle both formats

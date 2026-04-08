@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
@@ -59,7 +59,7 @@ const ClassroomContent = () => {
             // It's an S3 Key, fetch signed URL
             try {
                 const token = localStorage.getItem('token');
-                const res = await fetch(`process.env.NEXT_PUBLIC_API_URL/api/s3/view-url?key=${currentLecture.videoUrl}`, {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/s3/view-url?key=${currentLecture.videoUrl}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (res.ok) {
@@ -93,7 +93,7 @@ const ClassroomContent = () => {
                 const token = localStorage.getItem('token');
 
                 // Fetch fresh user data to get enrollment status
-                const userRes = await fetch(`process.env.NEXT_PUBLIC_API_URL/api/users/${parsedUser.id || parsedUser._id}`, {
+                const userRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${parsedUser.id || parsedUser._id}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 let userData = parsedUser;
@@ -116,7 +116,7 @@ const ClassroomContent = () => {
                 setCompletedLectures(enrollment.completedLectures || []);
 
                 // 3. Get Course Details
-                const courseRes = await fetch(`process.env.NEXT_PUBLIC_API_URL/api/courses/${courseId}`);
+                const courseRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/courses/${courseId}`);
                 if (courseRes.ok) {
                     const courseData = await courseRes.json();
                     setCourse(courseData);
@@ -147,11 +147,11 @@ const ClassroomContent = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/progress', {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/progress`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization`: `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
                     userId: user._id,
@@ -368,11 +368,11 @@ const ClassroomContent = () => {
                                                     // Log Gamification Activity
                                                     try {
                                                         const token = localStorage.getItem('token');
-                                                        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/gamification/log-activity', {
+                                                        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/gamification/log-activity`, {
                                                             method: 'POST',
                                                             headers: {
-                                                                'Content-Type': 'application/json',
-                                                                'Authorization`: `Bearer ${token}`
+                                                                  'Content-Type': 'application/json',
+                                                                  'Authorization': `Bearer ${token}`
                                                             },
                                                             body: JSON.stringify({
                                                                 email: user.email,

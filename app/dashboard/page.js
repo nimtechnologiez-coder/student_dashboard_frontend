@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -71,7 +71,7 @@ const StudentDashboardContent = () => {
 
                 // Fetch System Announcement
                 let announcementMessage = '';
-                const settingsRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/settings/announcement', { headers });
+                const settingsRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/settings/announcement`, { headers });
                 if (settingsRes.ok) {
                     const data = await settingsRes.json();
                     setSystemAnnouncement(data.message || '');
@@ -81,21 +81,21 @@ const StudentDashboardContent = () => {
                 // Fetch User Data
                 const storedUser = localStorage.getItem('user');
                 if (!storedUser) {
-                    router.push('/login`);
+                    router.push('/login');
                     return;
                 }
 
                 const parsedUser = JSON.parse(storedUser);
                 const email = parsedUser.email;
 
-                const userRes = await fetch(`process.env.NEXT_PUBLIC_API_URL/api/user?email=${email}`, { headers });
+                const userRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user?email=${email}`, { headers });
                 if (userRes.ok) {
                     const data = await userRes.json();
                     setUser(data);
 
                     // Fetch Gamification Data
                     try {
-                        const statsRes = await fetch(`process.env.NEXT_PUBLIC_API_URL/api/gamification/stats/${email}`, { headers });
+                        const statsRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/gamification/stats/${email}`, { headers });
                         if (statsRes.ok) {
                             const stats = await statsRes.json();
                             setStreakData({ currentStreak: stats.currentStreak, longestStreak: stats.longestStreak });
@@ -103,11 +103,11 @@ const StudentDashboardContent = () => {
                         }
 
                         // Log daily login activity
-                        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/gamification/log-activity', {
+                        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/gamification/log-activity`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
-                                'Authorization`: `Bearer ${token}`
+                                'Authorization': `Bearer ${token}`
                             },
                             body: JSON.stringify({ email, type: 'login' })
                         });
@@ -196,7 +196,7 @@ const StudentDashboardContent = () => {
     const handleSaveProfile = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch(`process.env.NEXT_PUBLIC_API_URL/api/users/${user._id || user.id}`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${user._id || user.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -261,16 +261,16 @@ const StudentDashboardContent = () => {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             };
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/certificate/request', {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/certificate/request`, {
                 method: 'POST',
                 headers: headers,
                 body: JSON.stringify({ userId: user._id || user.id, courseId })
             });
             const data = await res.json();
             if (res.ok) {
-                alert('Certificate requested! Admin will approve shortly.`);
+                alert('Certificate requested! Admin will approve shortly.');
                 // Refresh user data
-                const userRes = await fetch(`process.env.NEXT_PUBLIC_API_URL/api/users/${user._id || user.id}`, {
+                const userRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${user._id || user.id}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (userRes.ok) {

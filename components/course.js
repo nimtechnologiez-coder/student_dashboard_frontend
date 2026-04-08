@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -62,7 +62,7 @@ const CoursePage = () => {
             }
             try {
                 const token = localStorage.getItem('token');
-                const res = await fetch(`process.env.NEXT_PUBLIC_API_URL/api/s3/view-url?key=${selectedCourse.videoLink}`, {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/s3/view-url?key=${selectedCourse.videoLink}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (res.ok) {
@@ -81,7 +81,7 @@ const CoursePage = () => {
             try {
                 const [coursesRes, heroRes] = await Promise.all([
                     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/courses`),
-                    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/settings/hero-image')
+                    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/settings/hero-image`)
                 ]);
 
                 if (coursesRes.ok) {
@@ -107,8 +107,8 @@ const CoursePage = () => {
 
                 // Background update for latest data (e.g. enrollments)
                 try {
-                    const token = localStorage.getItem('token`);
-                    const res = await fetch(`process.env.NEXT_PUBLIC_API_URL/api/users/${parsedUser.id}`, {
+                    const token = localStorage.getItem('token');
+                    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${parsedUser.id}`, {
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
                     if (res.ok) {
@@ -160,11 +160,11 @@ const CoursePage = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/enroll', {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/enroll`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization`: `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({ userId: user._id, courseId: selectedCourse._id })
             });
@@ -172,7 +172,7 @@ const CoursePage = () => {
             if (res.ok) {
                 alert('Enrollment Successful!');
                 // Refresh user data to update UI
-                const userRes = await fetch(`process.env.NEXT_PUBLIC_API_URL/api/users/${user._id}`, {
+                const userRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${user._id}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (userRes.ok) {
@@ -600,11 +600,11 @@ const CoursePage = () => {
 
                                                             try {
                                                                 const token = localStorage.getItem('token');
-                                                                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/progress', {
+                                                                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/progress`, {
                                                                     method: 'POST',
                                                                     headers: {
                                                                         'Content-Type': 'application/json',
-                                                                        'Authorization`: `Bearer ${token}`
+                                                                        'Authorization': `Bearer ${token}`
                                                                     },
                                                                     body: JSON.stringify({
                                                                         userId: user._id,
@@ -616,7 +616,7 @@ const CoursePage = () => {
                                                                 if (res.ok) {
                                                                     // Update local state - trigger re-fetch or manual update
                                                                     // Simple re-fetch user to get updated progress
-                                                                    const updatedUserRes = await fetch(`process.env.NEXT_PUBLIC_API_URL/api/users/${user._id}`, {
+                                                                    const updatedUserRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${user._id}`, {
                                                                         headers: { 'Authorization': `Bearer ${token}` }
                                                                     });
                                                                     const updatedUser = await updatedUserRes.json();

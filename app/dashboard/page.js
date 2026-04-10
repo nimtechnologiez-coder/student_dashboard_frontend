@@ -124,7 +124,7 @@ const StudentDashboardContent = () => {
                     if (announcementMessage) { // Use the captured announcement message
                         initialNotifications.push({
                             id: 'sys-announcement',
-                            title: 'ðŸ“¢ System Announcement',
+                            title: ' System Announcement',
                             message: announcementMessage,
                             time: 'Just now',
                             type: 'system'
@@ -727,7 +727,7 @@ const StudentDashboardContent = () => {
                             <Menu size={24} />
                         </button>
                         <div>
-                            <h2 className={`text-2xl md:text-3xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>Welcome back, {user.fullName.split(' ')[0]}! ðŸ‘‹</h2>
+                            <h2 className={`text-2xl md:text-3xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>Welcome back, {user.fullName.split(' ')[0]}!</h2>
                             {activeTab === 'learning' && (
                                 <p className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'} mt-1`}>You have {user.enrolledCourses?.length || 0} active courses.</p>
                             )}

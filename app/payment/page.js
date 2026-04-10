@@ -194,7 +194,7 @@ const PaymentContent = () => {
                                 <option value="" disabled>-- Select a Course --</option>
                                 {courses.map(course => (
                                     <option key={course._id} value={course._id}>
-                                        {course.title} (â‚¹{course.price})
+                                        {course.title} (₹{course.price})
                                     </option>
                                 ))}
                             </select>
@@ -299,20 +299,20 @@ const PaymentContent = () => {
                         <div className="space-y-4 mb-6 pb-6 border-b border-white/10">
                             <div className="flex justify-between items-start">
                                 <span className="text-gray-400 text-sm">Course Fee</span>
-                                <span className="font-semibold">â‚¹{coursePrice.toFixed(2)}</span>
+                                <span className="font-semibold">₹{coursePrice.toFixed(2)}</span>
                             </div>
                             <div className="flex justify-between items-start">
                                 <span className="text-gray-400 text-sm">Processing Fee</span>
-                                <span className="font-semibold">â‚¹0.00</span>
+                                <span className="font-semibold">₹0.00</span>
                             </div>
                             <div className="flex justify-between items-start text-[#A3D861]">
                                 <span className="text-sm">Welcome Offer</span>
-                                <span className="font-semibold">-â‚¹{defaultDiscount.toFixed(2)}</span>
+                                <span className="font-semibold">-₹{defaultDiscount.toFixed(2)}</span>
                             </div>
                             {appliedCoupon && (
                                 <div className="flex justify-between items-start text-[#A3D861]">
                                     <span className="text-sm">Coupon ({appliedCoupon.code})</span>
-                                    <span className="font-semibold">-â‚¹{couponDiscount.toFixed(2)}</span>
+                                    <span className="font-semibold">-₹{couponDiscount.toFixed(2)}</span>
                                 </div>
                             )}
                         </div>
@@ -341,7 +341,7 @@ const PaymentContent = () => {
 
                         <div className="flex justify-between items-center mb-8">
                             <span className="text-lg font-bold">Total</span>
-                            <span className="text-2xl font-black text-white">â‚¹{totalAmount.toFixed(2)}</span>
+                            <span className="text-2xl font-black text-white">₹{totalAmount.toFixed(2)}</span>
                         </div>
 
                         <button

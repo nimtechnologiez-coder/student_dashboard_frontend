@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
@@ -52,7 +52,7 @@ const SubscriptionPage = () => {
                         </div>
 
                         <div className="flex items-baseline gap-2 mb-8">
-                            <span className="text-5xl font-black text-white">â‚¹2,000</span>
+                            <span className="text-5xl font-black text-white">₹2,000</span>
                             <span className="text-gray-500 font-bold">/ month / user</span>
                         </div>
 
@@ -169,7 +169,7 @@ const SubscriptionPage = () => {
                         onClick={() => router.push('/demo')}
                         className="text-[#A3D861] font-bold hover:underline"
                     >
-                        Talk to an expert â†’
+                        Talk to an expert →
                     </button>
                 </div>
             </div>

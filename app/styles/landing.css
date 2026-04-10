@@ -116,7 +116,7 @@ button,
 .course-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  /* ✅ always 4 cards */
+  /*  always 4 cards */
   gap: 25px;
   max-width: 1200px;
   margin: auto;
@@ -165,7 +165,7 @@ button,
   transform: scale(1.25) translateX(40px);
 
   transition: none;
-  /* ❌ no hover movement */
+  /*  no hover movement */
 }
 
 .course-hover-area {
@@ -359,7 +359,7 @@ button,
 }
 
 .plan-card ul li::before {
-  content: "✓";
+  content: "";
   color: #7c3aed;
   font-weight: 700;
 }
@@ -636,7 +636,7 @@ button,
   margin: 60px 20px;
 
   min-height: 600px;
-  /* 🔥 important */
+  /*  important */
 
   background-image: url("https://freerangestock.com/sample/130389/dark-view-of-man-working-on-laptop-.jpg");
   background-repeat: no-repeat;
@@ -818,7 +818,7 @@ button,
   margin: 0 auto 50px;
   padding: 0 20px;
   text-align: center;
-  /* ⭐ THIS CENTERS THE CONTENT */
+  /*  THIS CENTERS THE CONTENT */
 }
 
 .business-intro h2 {
@@ -913,7 +913,7 @@ button,
 
 /* Check Icon */
 .card-body ul li::before {
-  content: "✓";
+  content: "";
   position: absolute;
   left: 0;
   color: #16a34a;
@@ -1123,7 +1123,7 @@ button,
   background: #eef2f7;
   padding: 70px 40px;
   text-align: center;
-  /* ⭐ THIS CENTERS EVERYTHING */
+  /*  THIS CENTERS EVERYTHING */
 }
 
 .career-title {
@@ -1729,7 +1729,7 @@ button,
   align-items: center;
   text-align: center;
   flex-direction: column;
-  /* ⭐ important */
+  /*  important */
 
   padding: 80px 20px;
   position: relative;
@@ -1834,7 +1834,7 @@ button,
   max-width: 500px;
 
   min-height: 560px;
-  /* ✅ USE THIS */
+  /*  USE THIS */
   object-fit: cover;
 
   border-radius: 24px;
@@ -2636,7 +2636,7 @@ button,
 
   /* width: 80%; */
   height: auto;
-  /* ⭐ important */
+  /*  important */
 }
 
 
@@ -2773,7 +2773,7 @@ button,
   margin: 0 auto 40px auto;
   margin-top: 20px;
 
-  /* ⭐ adds gap below */
+  /*  adds gap below */
   text-align: center;
 }
 
@@ -3066,7 +3066,7 @@ button,
     background-position: top center;
     background-size: 260px;
     padding-top: 260px;
-    /* ⭐ space for image */
+    /*  space for image */
     text-align: center;
   }
 

@@ -1,4 +1,4 @@
-﻿import { NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 export function middleware(request) {
     // Current student portal middleware allows all routes

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React from 'react';
 import Link from 'next/link';
@@ -202,7 +202,7 @@ const Learnmores = () => {
                         Nim Academy
                     </Link>
                     <div className="text-gray-500 text-sm">
-                        Â© {new Date().getFullYear()} Nim Academy. All rights reserved.
+                         {new Date().getFullYear()} Nim Academy. All rights reserved.
                     </div>
                     <div className="flex gap-6">
                         <Link href="#" className="text-gray-400 hover:text-white transition-colors">Privacy</Link>

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import { Mail, Phone, User, ArrowRight, CheckCircle, Smartphone } from 'lucide-react';
@@ -149,7 +149,7 @@ const RegisterPage = () => {
             <div className="form-group">
                 <label><Smartphone size={16} /> Mobile Number</label>
                 <div className="mobile-input">
-                    <span className="flag">Ã°Å¸â€¡Â®Ã°Å¸â€¡Â³ +91</span>
+                    <span className="flag"> +91</span>
                     <input
                         type="tel"
                         name="mobile"

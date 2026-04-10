@@ -118,7 +118,7 @@ const LoginPage = () => {
                                         name="password"
                                         value={formData.password}
                                         onChange={handleChange}
-                                        placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                                        placeholder="••••••••"
                                         className="w-full bg-[#050a14] border border-white/10 rounded-xl pl-10 pr-12 py-3.5 focus:outline-none focus:border-[#A3D861] focus:ring-1 focus:ring-[#A3D861] transition-all text-white placeholder:text-gray-600"
                                         required
                                     />

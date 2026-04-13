@@ -131,7 +131,7 @@ const CoursePage = () => {
     useEffect(() => {
         const courseId = searchParams.get('courseId');
         if (courseId && allCourses.length > 0) {
-            const foundCourse = allCourses.find(c => c._id === courseId);
+            const foundCourse = allCourses.find(c => (c.id || c._id) === courseId);
             if (foundCourse) {
                 setSelectedCourse(foundCourse);
             }
@@ -140,7 +140,7 @@ const CoursePage = () => {
 
     const handleCourseSelect = (course) => {
         // Update URL to reflect selection
-        router.push(`/courses?courseId=${course._id}`);
+        router.push(`/courses?courseId=${course.id || course._id}`);
         setSelectedCourse(course);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
@@ -166,13 +166,13 @@ const CoursePage = () => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ userId: user._id, courseId: selectedCourse._id })
+                body: JSON.stringify({ userId: user.id || user._id, courseId: selectedCourse.id || selectedCourse._id })
             });
             const data = await res.json();
             if (res.ok) {
                 alert('Enrollment Successful!');
                 // Refresh user data to update UI
-                const userRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${user._id}`, {
+                const userRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${user.id || user._id}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (userRes.ok) {
@@ -360,7 +360,7 @@ const CoursePage = () => {
                             });
 
                             if (courses.length > 0) {
-                                courses.forEach(c => usedCourseIds.add(c._id));
+                                courses.forEach(c => usedCourseIds.add(c.id || c._id));
                                 // Remove duplicates & Sort
                                 const uniqueCourses = Array.from(new Set(courses.map(c => c._id)))
                                     .map(id => courses.find(c => c._id === id));
@@ -372,10 +372,10 @@ const CoursePage = () => {
 
 
                         // 2. Catch-all for others ("Other" category or uncategorized)
-                        const otherCourses = publishedCourses.filter(c => !usedCourseIds.has(c._id) || (c.category === 'Other' && !usedCourseIds.has(c._id)));
+                        const otherCourses = publishedCourses.filter(c => !usedCourseIds.has(c.id || c._id) || (c.category === 'Other' && !usedCourseIds.has(c.id || c._id)));
                         if (otherCourses.length > 0) {
                             // Remove duplicates & Sort
-                            const uniqueOther = Array.from(new Set(otherCourses.map(c => c._id))).map(id => otherCourses.find(c => c._id === id));
+                            const uniqueOther = Array.from(new Set(otherCourses.map(c => c.id || c._id))).map(id => otherCourses.find(c => (c.id || c._id) === id));
                             uniqueOther.sort(sortCourses);
                             if (uniqueOther.length > 0) sections.push({ title: "Other Popular Courses", courses: uniqueOther });
                         }
@@ -426,7 +426,7 @@ const CoursePage = () => {
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                                     {section.courses.map(course => (
                                         <CourseCard
-                                            key={course._id}
+                                            key={course.id || course._id}
                                             course={course}
                                             user={user}
                                             router={router}
@@ -569,7 +569,7 @@ const CoursePage = () => {
                                                 <div className="bg-black/20 divide-y divide-white/5">
                                                     {module.lectures.map((lecture, lIdx) => {
                                                         // Check enrollment using new schema (Array of Objects)
-                                                        const enrollment = user && user.enrolledCourses ? user.enrolledCourses.find(e => e.course && (e.course._id === courseData._id || e.course === courseData._id)) : null;
+                                                        const enrollment = user && user.enrolledCourses ? user.enrolledCourses.find(e => e.course && ((e.course.id || e.course._id || e.course) === (courseData.id || courseData._id))) : null;
                                                         const isEnrolled = !!enrollment;
 
                                                         // Check if lecture is completed
@@ -607,8 +607,8 @@ const CoursePage = () => {
                                                                         'Authorization': `Bearer ${token}`
                                                                     },
                                                                     body: JSON.stringify({
-                                                                        userId: user._id,
-                                                                        courseId: courseData._id,
+                                                                        userId: user.id || user._id,
+                                                                        courseId: courseData.id || courseData._id,
                                                                         lectureId: lecture.title
                                                                     })
                                                                 });
@@ -616,7 +616,7 @@ const CoursePage = () => {
                                                                 if (res.ok) {
                                                                     // Update local state - trigger re-fetch or manual update
                                                                     // Simple re-fetch user to get updated progress
-                                                                    const updatedUserRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${user._id}`, {
+                                                                    const updatedUserRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${user.id || user._id}`, {
                                                                         headers: { 'Authorization': `Bearer ${token}` }
                                                                     });
                                                                     const updatedUser = await updatedUserRes.json();
@@ -764,8 +764,12 @@ const CoursePage = () => {
 
                                 <div className="p-5 lg:p-6 space-y-5 lg:space-y-6">
                                     <div className="flex items-baseline gap-3">
-                                        <span className="text-3xl font-black text-white">₹{courseData.price.toString().replace('$', '')}</span>
-                                        <span className="text-lg text-gray-500 line-through">₹{courseData.originalPrice.toString().replace('$', '')}</span>
+                                        <span className="text-3xl font-black text-white">
+                                            ₹{String(courseData.price ?? 0).replace('$', '')}
+                                        </span>
+                                        <span className="text-lg text-gray-500 line-through">
+                                            ₹{String(courseData.originalPrice ?? courseData.price ?? 0).replace('$', '')}
+                                        </span>
                                         <span className="text-sm font-bold text-[#A3D861]">50% OFF</span>
                                     </div>
 
@@ -781,7 +785,7 @@ const CoursePage = () => {
                                                 </button>
                                                 {/* Progress Bar Display */}
                                                 {(() => {
-                                                    const enrollment = user.enrolledCourses.find(e => e.course && (e.course === courseData._id || e.course._id === courseData._id));
+                                                    const enrollment = user.enrolledCourses.find(e => e.course && ((e.course.id || e.course._id || e.course) === (courseData.id || courseData._id)));
                                                     const progress = enrollment ? enrollment.progress || 0 : 0;
                                                     return (
                                                         <div className="bg-white/10 rounded-full h-2.5 overflow-hidden">
@@ -791,7 +795,7 @@ const CoursePage = () => {
                                                 })()}
                                                 <p className="text-center text-xs text-gray-400">
                                                     {(() => {
-                                                        const enrollment = user.enrolledCourses.find(e => e.course && (e.course === courseData._id || e.course._id === courseData._id));
+                                                        const enrollment = user.enrolledCourses.find(e => e.course && ((e.course.id || e.course._id || e.course) === (courseData.id || courseData._id)));
                                                         return enrollment ? `${enrollment.progress || 0}% Complete` : '';
                                                     })()}
                                                 </p>
@@ -804,7 +808,7 @@ const CoursePage = () => {
                                                             router.push('/register');
                                                             return;
                                                         }
-                                                        router.push(`/payment?courseId=${courseData._id}`);
+                                                        router.push(`/payment?courseId=${courseData.id || courseData._id}`);
                                                     }}
                                                     className="w-full bg-[#A3D861] hover:bg-[#A3D861]/90 text-black font-black text-lg py-3 rounded-xl transition-all shadow-[0_4px_14px_0_rgba(163,216,97,0.39)] hover:shadow-[0_6px_20px_rgba(163,216,97,0.23)] active:scale-[0.98] cursor-pointer"
                                                 >
@@ -856,7 +860,7 @@ const CoursePage = () => {
 function CourseCard({ course, user, router }) {
     return (
         <div
-            onClick={() => router.push(`/courses?courseId=${course._id}`)}
+            onClick={() => router.push(`/courses?courseId=${course.id || course._id}`)}
             className="bg-[#0a0f1a] border border-white/10 rounded-2xl overflow-hidden hover:border-[#A3D861]/50 transition-all cursor-pointer group flex flex-col h-full hover:-translate-y-2 shadow-lg hover:shadow-[#A3D861]/10"
         >
             <div className="relative aspect-video overflow-hidden bg-gray-800">
@@ -892,7 +896,7 @@ function CourseCard({ course, user, router }) {
                 <div className="mt-auto">
                     {/* Validity Display */}
                     {(() => {
-                        const enrollment = user && user.enrolledCourses ? user.enrolledCourses.find(e => e.course === course._id || (e.course && e.course._id === course._id)) : null;
+                        const enrollment = user && user.enrolledCourses ? user.enrolledCourses.find(e => (e.course === (course.id || course._id) || (e.course && (e.course.id || e.course._id) === (course.id || course._id)))) : null;
 
                         if (enrollment) {
                             // Enrolled: Show Remaining Days
@@ -932,8 +936,12 @@ function CourseCard({ course, user, router }) {
 
                 <div className="pt-4 border-t border-white/5 flex items-center justify-between">
                     <div className="flex items-baseline gap-2">
-                        <span className="font-bold text-white text-lg">₹{course.price.toString().replace('$', '')}</span>
-                        <span className="text-gray-500 text-xs line-through">₹{course.originalPrice.toString().replace('$', '')}</span>
+                        <span className="font-bold text-white text-lg">
+                            ₹{String(course.price ?? 0).replace('$', '')}
+                        </span>
+                        <span className="text-gray-500 text-xs line-through">
+                            ₹{String(course.originalPrice ?? course.price ?? 0).replace('$', '')}
+                        </span>
                     </div>
                     <div className="flex items-center gap-3">
                         {course.videoLink && (
@@ -948,7 +956,7 @@ function CourseCard({ course, user, router }) {
                                 <Play size={20} fill="currentColor" />
                             </a>
                         )}
-                        <button onClick={(e) => { e.stopPropagation(); router.push(`/courses?courseId=${course._id}`); }} className="text-[#A3D861] text-sm font-bold group-hover:underline">View Details</button>
+                        <button onClick={(e) => { e.stopPropagation(); router.push(`/courses?courseId=${course.id || course._id}`); }} className="text-[#A3D861] text-sm font-bold group-hover:underline">View Details</button>
                     </div>
                 </div>
             </div>

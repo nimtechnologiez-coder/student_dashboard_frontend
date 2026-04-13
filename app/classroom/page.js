@@ -103,9 +103,10 @@ const ClassroomContent = () => {
                 }
 
                 // 2. Check Enrollment
-                const enrollment = userData.enrolledCourses?.find(e =>
-                    (e.course._id || e.course) === courseId
-                );
+                const enrollment = userData.enrolledCourses?.find(e => {
+                    const eId = e.course._id || e.course.id || e.course;
+                    return eId === courseId;
+                });
 
                 if (!enrollment) {
                     alert('You are not enrolled in this course.');
@@ -154,8 +155,8 @@ const ClassroomContent = () => {
                     'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
-                    userId: user._id,
-                    courseId: course._id,
+                    userId: user.id || user._id,
+                    courseId: course.id || course._id,
                     lectureId: lectureId
                 })
             });
@@ -378,7 +379,7 @@ const ClassroomContent = () => {
                                                                 email: user.email,
                                                                 type: 'quiz_complete',
                                                                 metadata: {
-                                                                    courseId: course._id,
+                                                                    courseId: course.id || course._id,
                                                                     quizModuleIndex,
                                                                     quizScore: score
                                                                 }

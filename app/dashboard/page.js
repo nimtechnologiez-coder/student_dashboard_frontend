@@ -147,7 +147,7 @@ const StudentDashboardContent = () => {
 
                             if (diffDays <= 10 && diffDays >= 0) {
                                 initialNotifications.push({
-                                    id: `expiry-${enrollment.course._id}`,
+                                    id: `expiry-${enrollment.course.id || enrollment.course._id}`,
                                     title: 'Validity Expiring Soon',
                                     message: `Your access to "${enrollment.course.title}" expires in ${diffDays} days!`,
                                     time: 'Action Required',
@@ -317,7 +317,7 @@ const StudentDashboardContent = () => {
                                 <div>
                                     {!enrollment.certificateStatus || enrollment.certificateStatus === 'Not Started' ? (
                                         <button
-                                            onClick={() => handleRequestCertificate(enrollment.course._id)}
+                                            onClick={() => handleRequestCertificate(enrollment.course.id || enrollment.course._id)}
                                             className="px-6 py-2 bg-[#0395B2] text-white font-bold rounded-lg hover:bg-[#0395B2]/90 transition-colors"
                                         >
                                             Request Certificate
@@ -782,13 +782,13 @@ const StudentDashboardContent = () => {
 
                 {/* Content Area */}
                 {/* Gamification Section */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10 overflow-hidden">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10 items-stretch">
                     {/* Streak Card */}
-                    <div className={`p-6 rounded-3xl border transition-all duration-500 ${theme === 'dark' ? 'bg-[#0a0f1a] border-white/10' : 'bg-white border-gray-100 shadow-sm'} relative overflow-hidden group`}>
+                    <div className={`p-6 rounded-3xl border transition-all duration-500 ${theme === 'dark' ? 'bg-[#0a0f1a] border-white/10' : 'bg-white border-gray-100 shadow-sm'} relative overflow-hidden group flex flex-col h-full min-h-[20px]`}>
                         <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity translate-x-1/4 -translate-y-1/4 rotate-12">
                             <Flame size={180} fill="#A3D861" />
                         </div>
-                        <div className="relative z-10">
+                        <div className="relative z-10 flex flex-col h-full">
                             <div className="flex items-center gap-4 mb-6">
                                 <div className="w-14 h-14 bg-[#A3D861]/20 rounded-2xl flex items-center justify-center text-[#A3D861] shadow-lg shadow-[#A3D861]/10">
                                     <Flame size={28} fill="currentColor" />
@@ -801,7 +801,7 @@ const StudentDashboardContent = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="space-y-3">
+                            <div className="space-y-3 mt-auto">
                                 <div className="flex justify-between text-[11px] font-bold uppercase tracking-tighter">
                                     <span className={theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}>Next Goal: 7 Days</span>
                                     <span className="text-[#A3D861]">{Math.round(Math.min(100, (streakData.currentStreak / 7) * 100))}%</span>
@@ -820,8 +820,8 @@ const StudentDashboardContent = () => {
                     </div>
 
                     {/* Achievements Summary */}
-                    <div className={`lg:col-span-2 p-6 rounded-3xl border transition-all duration-500 ${theme === 'dark' ? 'bg-[#0a0f1a] border-white/10' : 'bg-white border-gray-100 shadow-sm'}`}>
-                        <div className="flex items-center justify-between mb-8">
+                    <div className={`lg:col-span-2 p-6 rounded-3xl border transition-all duration-500 ${theme === 'dark' ? 'bg-[#0a0f1a] border-white/10' : 'bg-white border-gray-100 shadow-sm'} flex flex-col h-full min-h-[240px]`}>
+                        <div className="flex items-center justify-between mb-8 shrink-0">
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 bg-purple-500/20 rounded-xl flex items-center justify-center text-purple-400">
                                     <Award size={22} />
@@ -832,26 +832,28 @@ const StudentDashboardContent = () => {
                                 {achievements.length} UNLOCKED
                             </span>
                         </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {achievements.length > 0 ? achievements.map((ach, idx) => (
-                                <div key={idx} className={`p-4 rounded-2xl border transition-all hover:scale-[1.02] cursor-default active:scale-95 ${theme === 'dark' ? 'bg-white/5 border-white/5 hover:border-[#A3D861]/30' : 'bg-gray-50 border-gray-100 hover:border-[#0395B2]/30'} flex items-center gap-4`}>
-                                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg transition-transform group-hover:rotate-12 ${theme === 'dark' ? 'bg-black/40 text-[#A3D861]' : 'bg-white text-[#0395B2]'}`}>
-                                        <Award size={24} />
+                        <div className="flex-1 flex flex-col justify-center">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                {achievements.length > 0 ? achievements.map((ach, idx) => (
+                                    <div key={idx} className={`p-4 rounded-2xl border transition-all hover:scale-[1.02] cursor-default active:scale-95 ${theme === 'dark' ? 'bg-white/5 border-white/5 hover:border-[#A3D861]/30' : 'bg-gray-50 border-gray-100 hover:border-[#0395B2]/30'} flex items-center gap-4`}>
+                                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg transition-transform group-hover:rotate-12 ${theme === 'dark' ? 'bg-black/40 text-[#A3D861]' : 'bg-white text-[#0395B2]'}`}>
+                                            <Award size={24} />
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <p className={`text-xs font-black truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{ach.title}</p>
+                                            <p className={`text-[10px] font-medium line-clamp-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{ach.description}</p>
+                                        </div>
                                     </div>
-                                    <div className="flex-1 min-w-0">
-                                        <p className={`text-xs font-black truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{ach.title}</p>
-                                        <p className={`text-[10px] font-medium line-clamp-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{ach.description}</p>
+                                )) : (
+                                    <div className={`col-span-full py-6 text-center rounded-2xl border border-dashed flex flex-col items-center justify-center gap-2 ${theme === 'dark' ? 'bg-black/20 border-white/10' : 'bg-gray-50 border-gray-200'}`}>
+                                        <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center text-gray-600 mb-2">
+                                            <Lock size={20} />
+                                        </div>
+                                        <p className="text-xs font-bold text-gray-500">No achievements earned yet</p>
+                                        <p className="text-[10px] text-gray-400">Complete your first lesson to earn a badge!</p>
                                     </div>
-                                </div>
-                            )) : (
-                                <div className={`col-span-full py-10 text-center rounded-2xl border border-dashed flex flex-col items-center justify-center gap-2 ${theme === 'dark' ? 'bg-black/20 border-white/10' : 'bg-gray-50 border-gray-200'}`}>
-                                    <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center text-gray-600 mb-2">
-                                        <Lock size={20} />
-                                    </div>
-                                    <p className="text-xs font-bold text-gray-500">No achievements earned yet</p>
-                                    <p className="text-[10px] text-gray-400">Complete your first lesson to earn a badge!</p>
-                                </div>
-                            )}
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -957,7 +959,7 @@ const DashboardCourseCard = ({ enrollment, theme }) => {
                 })()}
 
                 <button
-                    onClick={() => router.push(`/classroom?courseId=${course._id}`)}
+                    onClick={() => router.push(`/classroom?courseId=${course.id || course._id}`)}
                     className={`w-full py-3 rounded-xl border transition-all font-bold flex items-center justify-center gap-2 ${theme === 'dark' ? 'bg-white/5 border-white/10 hover:bg-[#A3D861] hover:text-black hover:border-[#A3D861]' : 'bg-gray-50 border-gray-200 hover:bg-[#A3D861] hover:text-black hover:border-[#A3D861]'}`}
                 >
                     {progress > 0 ? 'Continue Learning' : 'Start Course'} <Play size={16} fill="currentColor" />

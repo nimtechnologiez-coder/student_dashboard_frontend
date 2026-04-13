@@ -786,7 +786,7 @@ const StudentDashboardContent = () => {
                     {/* Streak Card */}
                     <div className={`p-6 rounded-3xl border transition-all duration-500 ${theme === 'dark' ? 'bg-[#0a0f1a] border-white/10' : 'bg-white border-gray-100 shadow-sm'} relative overflow-hidden group flex flex-col h-full min-h-[20px]`}>
                         <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity translate-x-1/4 -translate-y-1/4 rotate-12">
-                            <Flame size={180} fill="#A3D861" />
+                            <Flame size={179} fill="#A3D861" />
                         </div>
                         <div className="relative z-10 flex flex-col h-full">
                             <div className="flex items-center gap-4 mb-6">

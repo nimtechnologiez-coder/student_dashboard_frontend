@@ -357,7 +357,7 @@ const PaymentContent = () => {
                         </button>
 
                         <div className="mt-6 flex justify-center gap-4 text-gray-500">
-                            <ShieldCheck size={18} />
+                            <ShieldCheck size={19} />
                             <span className="text-xs font-medium">256-bit SSL Secure Payment</span>
                         </div>
                     </div>

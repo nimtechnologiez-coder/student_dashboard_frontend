@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { 
     ShieldCheck, 
     CreditCard, 
@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-const TeamPaymentPage = () => {
+const TeamPaymentContent = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const preSelectedCourseId = searchParams.get('courseId');
@@ -47,7 +47,6 @@ const TeamPaymentPage = () => {
                 const parsed = JSON.parse(storedUser);
                 setCurrentUser(parsed);
                 
-                // Fetch latest user status to check for existing subscription
                 const token = localStorage.getItem('token');
                 fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user?email=${parsed.email}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
@@ -160,14 +159,12 @@ const TeamPaymentPage = () => {
     return (
         <div className="min-h-screen bg-[#02040a] text-white font-sans selection:bg-[#A3D861] selection:text-black flex flex-col items-center py-12 px-4 relative overflow-hidden">
             
-            {/* Background Effects */}
             <div className="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
                 <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-[#0395B2] opacity-10 rounded-full blur-[120px]"></div>
                 <div className="absolute bottom-[-10%] left-[-5%] w-[600px] h-[600px] bg-[#A3D861] opacity-5 rounded-full blur-[120px]"></div>
             </div>
 
             <div className="relative z-10 w-full max-w-6xl">
-                {/* Header */}
                 <header className="flex justify-between items-center mb-12">
                     <button
                         onClick={() => router.push('/team-plan')}
@@ -183,10 +180,8 @@ const TeamPaymentPage = () => {
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
                     
-                    {/* Left: Configuration & Payment */}
                     <div className="lg:col-span-2 space-y-8">
                         
-                        {/* 1. Course Selection */}
                         <div className="bg-[#0a0f1a] border border-white/10 rounded-[2.5rem] p-8 lg:p-10 shadow-2xl">
                             <h2 className="text-2xl font-bold mb-8 flex items-center gap-3">
                                 <BookOpen className="text-[#A3D861]" size={24} />
@@ -222,7 +217,6 @@ const TeamPaymentPage = () => {
                             )}
                         </div>
 
-                        {/* 2. Seat Selection */}
                         <div className="bg-[#0a0f1a] border border-white/10 rounded-[2.5rem] p-8 lg:p-10 shadow-2xl">
                             <h2 className="text-2xl font-bold mb-2 flex items-center gap-3">
                                 <Users className="text-[#A3D861]" size={24} />
@@ -258,7 +252,6 @@ const TeamPaymentPage = () => {
                             </div>
                         </div>
                         
-                        {/* 3. Contact Information */}
                         <div className="bg-[#0a0f1a] border border-white/10 rounded-[2.5rem] p-8 lg:p-10 shadow-2xl">
                             <h2 className="text-2xl font-bold mb-8 flex items-center gap-3">
                                 <User className="text-[#A3D861]" size={24} />
@@ -300,7 +293,6 @@ const TeamPaymentPage = () => {
                             </div>
                         </div>
 
-                        {/* 4. Payment Method */}
                         <div className="bg-[#0a0f1a] border border-white/10 rounded-[2.5rem] p-8 lg:p-10 shadow-2xl">
                             <h2 className="text-2xl font-bold mb-8 flex items-center gap-3">
                                 <Lock className="text-[#A3D861]" size={24} />
@@ -327,7 +319,6 @@ const TeamPaymentPage = () => {
                         </div>
                     </div>
 
-                    {/* Right: Order Summary */}
                     <div className="lg:col-span-1">
                         <div className="bg-[#0a0f1a] border border-white/10 rounded-[2.5rem] p-8 shadow-2xl sticky top-8 space-y-8">
                             <div>
@@ -402,4 +393,14 @@ const TeamPaymentPage = () => {
     );
 };
 
-export default TeamPaymentPage;
+export default function TeamPaymentPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen bg-[#02040a] text-white flex items-center justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#A3D861]"></div>
+            </div>
+        }>
+            <TeamPaymentContent />
+        </Suspense>
+    );
+}

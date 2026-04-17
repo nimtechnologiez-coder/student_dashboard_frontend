@@ -7,6 +7,8 @@ import ChatBot from "./ChatBot";
 
 // import logo from "../images/Nim Academy.png"; // Replaced with static path
 const logo = "/Nim Academy.png";
+const Startupvec = "/startupvec.png";
+
 
 /* ================= DATA ================= */
 
@@ -491,7 +493,7 @@ const NewLandingPage = () => {
                                 <p className="instructor">{course.instructor}</p>
 
                                 <div className="rating">
-                                     {course.rating}
+                                    {course.rating}
                                     <span> ({course.reviews})</span>
                                 </div>
 
@@ -769,9 +771,14 @@ const NewLandingPage = () => {
                         <div className="card-top purple"></div>
                         <div className="card-body">
                             <h3>Team Plan</h3>
-                            <p className="sub-text"> 2 to 50 people - For your team</p>
-
-                            <button className="outline-btn" onClick={() => router.push('/subscription')}>Start subscription</button>
+                            <p className="sub-text">
+                                More than 20 people - For your whole organization
+                            </p>
+                            {user?.enrolledCourses?.some(e => e.planType === 'Team') ? (
+                                <button className="outline-btn" onClick={() => router.push('/team-welcome')}>View My Team</button>
+                            ) : (
+                                <button className="outline-btn" onClick={() => router.push('/team-plan')}>Start subscription</button>
+                            )}
 
                             <div className="divider"></div>
 
@@ -794,10 +801,10 @@ const NewLandingPage = () => {
                         <div className="card-body">
                             <h3>Enterprise Plan</h3>
                             <p className="sub-text">
-                                 More than 20 people - For your whole organization
+                                More than 20 people - For your whole organization
                             </p>
 
-                            <button className="outline-btn" onClick={() => router.push('/demo')}>Request a demo</button>
+                            <button className="outline-btn" onClick={() => router.push('/enterprise')}>Request a proposal</button>
 
                             <div className="divider"></div>
 
@@ -807,12 +814,8 @@ const NewLandingPage = () => {
                                 <li>Access to 30,000+ top courses</li>
                                 <li>Certification prep</li>
                                 <li>Goal-focused recommendations</li>
-                                <li>AI-powered coaching</li>
                                 <li>Advanced analytics and insights</li>
                                 <li>Dedicated customer success team</li>
-                                <li>International course collection (15 languages)</li>
-                                <li>Customizable content</li>
-                                <li>Hands-on tech training with add-on</li>
                                 <li>Strategic implementation services</li>
                             </ul>
                         </div>
@@ -824,10 +827,10 @@ const NewLandingPage = () => {
                         <div className="card-body">
                             <h3>AI Fluency</h3>
                             <p className="sub-text">
-                                 From AI foundations to Enterprise transformation
+                                From AI foundations to Enterprise transformation
                             </p>
 
-                            <button className="outline-btn">Contact Us</button>
+                            <button className="outline-btn" onClick={() => router.push('/contact')}>Contact Us</button>
 
                             <div className="divider"></div>
 
@@ -844,7 +847,7 @@ const NewLandingPage = () => {
                             <p className="sub-text"> More than 20 people</p>
                             <p>
                                 Scale AI and technical expertise with 800+ specialized courses and
-                                30+ role-specific learning paths in multiple languages.
+                                30+ specific learning path.
                             </p>
                         </div>
                     </div>
@@ -969,7 +972,7 @@ const NewLandingPage = () => {
 
                         <button
                             className="join-btn secondary"
-                            onClick={() => router.push("/register")}
+                            onClick={() => router.push("/team-payment")}
                         >
                             Teams
                         </button>
@@ -982,7 +985,7 @@ const NewLandingPage = () => {
                         </button>
 
                         <div className="trust">
-                             10,000+ Learners •  Expert Mentors •  Job-Ready Skills
+                            10,000+ Learners •  Expert Mentors •  Job-Ready Skills
                         </div>
                     </div>
                 </div>
@@ -1129,10 +1132,7 @@ const NewLandingPage = () => {
 
                     {/* LEFT LOGO AREA */}
                     <div className="footer-logos">
-                        <img
-                            src="data:image/png;base64,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"
-                            alt="startup"
-                        />
+                        <img src={Startupvec} alt="startup" />
 
                         <img
                             src="https://nimtechnologies.in/static/media/Footer1.147bf340c174f14fdcf9.png"

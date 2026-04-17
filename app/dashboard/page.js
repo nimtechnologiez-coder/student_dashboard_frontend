@@ -115,8 +115,8 @@ const StudentDashboardContent = () => {
                         console.error("Gamification fetch failed:", err);
                     }
 
-                    // Filter out valid enrollments that have course data
-                    const validEnrollments = data.enrolledCourses?.filter(enrollment => enrollment.course) || [];
+                    // Filter out valid enrollments (courses or business plans)
+                    const validEnrollments = data.enrolledCourses?.filter(enrollment => enrollment.course || enrollment.planType === 'Team') || [];
                     setEnrolledCourses(validEnrollments);
 
                     // Initialize notifications with static/system ones
@@ -231,6 +231,118 @@ const StudentDashboardContent = () => {
     if (!user) return null;
 
     // --- Tab Content Renderers ---
+    
+    const renderDashboardOverview = () => {
+        const teamSubscription = user.enrolledCourses?.find(e => e.planType === 'Team');
+        
+        return (
+            <div className="space-y-8 animate-in fade-in duration-700">
+                {/* 1. Subscription Status (If Team) */}
+                {teamSubscription && (
+                    <div className="bg-gradient-to-r from-[#0395B2]/20 to-[#A3D861]/20 border border-[#A3D861]/30 rounded-3xl p-8 relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:scale-110 transition-transform duration-500">
+                            <Shield size={120} className="text-[#A3D861]" />
+                        </div>
+                        <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                            <div className="space-y-2">
+                                <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#A3D861] text-black text-[10px] font-black uppercase rounded-full">
+                                    <Lock size={12} /> Active Team Plan
+                                </div>
+                                <h2 className="text-3xl font-black text-white">Your Organization is Protected</h2>
+                                <p className="text-gray-400 max-w-xl">
+                                    You have access to all premium courses through your team subscription. 
+                                    Managing <span className="text-[#A3D861] font-bold">{teamSubscription.seatCount} seats</span> for your team.
+                                </p>
+                            </div>
+                            <button 
+                                onClick={() => setActiveTab('courses')}
+                                className="px-8 py-4 bg-white text-black font-black rounded-2xl hover:scale-105 transition-all shadow-[0_10px_30px_rgba(255,255,255,0.1)]"
+                            >
+                                Start Learning
+                            </button>
+                        </div>
+                    </div>
+                )}
+                
+                {/* 2. Gamification Section */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10 items-stretch">
+                    {/* Streak Card */}
+                    <div className={`p-6 rounded-3xl border transition-all duration-500 ${theme === 'dark' ? 'bg-[#0a0f1a] border-white/10' : 'bg-white border-gray-100 shadow-sm'} relative overflow-hidden group flex flex-col h-full min-h-[20px]`}>
+                        <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity translate-x-1/4 -translate-y-1/4 rotate-12">
+                            <Flame size={179} fill="#A3D861" />
+                        </div>
+                        <div className="relative z-10 flex flex-col h-full">
+                            <div className="flex items-center gap-4 mb-6">
+                                <div className="w-14 h-14 bg-[#A3D861]/20 rounded-2xl flex items-center justify-center text-[#A3D861] shadow-lg shadow-[#A3D861]/10">
+                                    <Flame size={28} fill="currentColor" />
+                                </div>
+                                <div>
+                                    <h3 className={`text-xs font-bold uppercase tracking-wider ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>Learning Streak</h3>
+                                    <div className="flex items-baseline gap-2">
+                                        <span className={`text-4xl font-black ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{streakData.currentStreak}</span>
+                                        <span className="text-sm font-bold text-[#A3D861]">DAYS</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="space-y-3 mt-auto">
+                                <div className="flex justify-between text-[11px] font-bold uppercase tracking-tighter">
+                                    <span className={theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}>Next Goal: 7 Days</span>
+                                    <span className="text-[#A3D861]">{Math.round(Math.min(100, (streakData.currentStreak / 7) * 100))}%</span>
+                                </div>
+                                <div className={`w-full h-2.5 rounded-full overflow-hidden ${theme === 'dark' ? 'bg-white/5' : 'bg-gray-100'}`}>
+                                    <div
+                                        className="h-full bg-gradient-to-r from-[#A3D861] via-[#8BC34A] to-[#A3D861] bg-[length:200%_auto] animate-gradient transition-all duration-1000"
+                                        style={{ width: `${Math.min(100, (streakData.currentStreak / 7) * 100)}%` }}
+                                    ></div>
+                                </div>
+                                <p className={`text-[10px] ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'} italic`}>
+                                    {streakData.currentStreak > 0 ? "You're on fire! Keep it up." : "Start learning today to begin your streak!"}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Achievements Summary */}
+                    <div className={`lg:col-span-2 p-6 rounded-3xl border transition-all duration-500 ${theme === 'dark' ? 'bg-[#0a0f1a] border-white/10' : 'bg-white border-gray-100 shadow-sm'} flex flex-col h-full min-h-[240px]`}>
+                        <div className="flex items-center justify-between mb-8 shrink-0">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 bg-purple-500/20 rounded-xl flex items-center justify-center text-purple-400">
+                                    <Award size={22} />
+                                </div>
+                                <h3 className={`text-lg font-black ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>My Achievements</h3>
+                            </div>
+                            <span className="text-xs font-black bg-[#A3D861]/10 text-[#A3D861] px-4 py-1.5 rounded-full border border-[#A3D861]/20 shadow-sm">
+                                {achievements.length} UNLOCKED
+                            </span>
+                        </div>
+                        <div className="flex-1 flex flex-col justify-center">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                {achievements.length > 0 ? achievements.map((ach, idx) => (
+                                    <div key={idx} className={`p-4 rounded-2xl border transition-all hover:scale-[1.02] cursor-default active:scale-95 ${theme === 'dark' ? 'bg-white/5 border-white/5 hover:border-[#A3D861]/30' : 'bg-gray-50 border-gray-100 hover:border-[#0395B2]/30'} flex items-center gap-4`}>
+                                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg transition-transform group-hover:rotate-12 ${theme === 'dark' ? 'bg-black/40 text-[#A3D861]' : 'bg-white text-[#0395B2]'}`}>
+                                            <Award size={24} />
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <p className={`text-xs font-black truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{ach.title}</p>
+                                            <p className={`text-[10px] font-medium line-clamp-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{ach.description}</p>
+                                        </div>
+                                    </div>
+                                )) : (
+                                    <div className={`col-span-full py-6 text-center rounded-2xl border border-dashed flex flex-col items-center justify-center gap-2 ${theme === 'dark' ? 'bg-black/20 border-white/10' : 'bg-gray-50 border-gray-200'}`}>
+                                        <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center text-gray-600 mb-2">
+                                            <Lock size={20} />
+                                        </div>
+                                        <p className="text-xs font-bold text-gray-500">No achievements earned yet</p>
+                                        <p className="text-[10px] text-gray-400">Complete your first lesson to earn a badge!</p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    };
 
     const renderMyLearning = () => (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -781,82 +893,6 @@ const StudentDashboardContent = () => {
                 </header>
 
                 {/* Content Area */}
-                {/* Gamification Section */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10 items-stretch">
-                    {/* Streak Card */}
-                    <div className={`p-6 rounded-3xl border transition-all duration-500 ${theme === 'dark' ? 'bg-[#0a0f1a] border-white/10' : 'bg-white border-gray-100 shadow-sm'} relative overflow-hidden group flex flex-col h-full min-h-[20px]`}>
-                        <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity translate-x-1/4 -translate-y-1/4 rotate-12">
-                            <Flame size={179} fill="#A3D861" />
-                        </div>
-                        <div className="relative z-10 flex flex-col h-full">
-                            <div className="flex items-center gap-4 mb-6">
-                                <div className="w-14 h-14 bg-[#A3D861]/20 rounded-2xl flex items-center justify-center text-[#A3D861] shadow-lg shadow-[#A3D861]/10">
-                                    <Flame size={28} fill="currentColor" />
-                                </div>
-                                <div>
-                                    <h3 className={`text-xs font-bold uppercase tracking-wider ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>Learning Streak</h3>
-                                    <div className="flex items-baseline gap-2">
-                                        <span className={`text-4xl font-black ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{streakData.currentStreak}</span>
-                                        <span className="text-sm font-bold text-[#A3D861]">DAYS</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="space-y-3 mt-auto">
-                                <div className="flex justify-between text-[11px] font-bold uppercase tracking-tighter">
-                                    <span className={theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}>Next Goal: 7 Days</span>
-                                    <span className="text-[#A3D861]">{Math.round(Math.min(100, (streakData.currentStreak / 7) * 100))}%</span>
-                                </div>
-                                <div className={`w-full h-2.5 rounded-full overflow-hidden ${theme === 'dark' ? 'bg-white/5' : 'bg-gray-100'}`}>
-                                    <div
-                                        className="h-full bg-gradient-to-r from-[#A3D861] via-[#8BC34A] to-[#A3D861] bg-[length:200%_auto] animate-gradient transition-all duration-1000"
-                                        style={{ width: `${Math.min(100, (streakData.currentStreak / 7) * 100)}%` }}
-                                    ></div>
-                                </div>
-                                <p className={`text-[10px] ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'} italic`}>
-                                    {streakData.currentStreak > 0 ? "You're on fire! Keep it up." : "Start learning today to begin your streak!"}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Achievements Summary */}
-                    <div className={`lg:col-span-2 p-6 rounded-3xl border transition-all duration-500 ${theme === 'dark' ? 'bg-[#0a0f1a] border-white/10' : 'bg-white border-gray-100 shadow-sm'} flex flex-col h-full min-h-[240px]`}>
-                        <div className="flex items-center justify-between mb-8 shrink-0">
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 bg-purple-500/20 rounded-xl flex items-center justify-center text-purple-400">
-                                    <Award size={22} />
-                                </div>
-                                <h3 className={`text-lg font-black ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>My Achievements</h3>
-                            </div>
-                            <span className="text-xs font-black bg-[#A3D861]/10 text-[#A3D861] px-4 py-1.5 rounded-full border border-[#A3D861]/20 shadow-sm">
-                                {achievements.length} UNLOCKED
-                            </span>
-                        </div>
-                        <div className="flex-1 flex flex-col justify-center">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                {achievements.length > 0 ? achievements.map((ach, idx) => (
-                                    <div key={idx} className={`p-4 rounded-2xl border transition-all hover:scale-[1.02] cursor-default active:scale-95 ${theme === 'dark' ? 'bg-white/5 border-white/5 hover:border-[#A3D861]/30' : 'bg-gray-50 border-gray-100 hover:border-[#0395B2]/30'} flex items-center gap-4`}>
-                                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg transition-transform group-hover:rotate-12 ${theme === 'dark' ? 'bg-black/40 text-[#A3D861]' : 'bg-white text-[#0395B2]'}`}>
-                                            <Award size={24} />
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <p className={`text-xs font-black truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{ach.title}</p>
-                                            <p className={`text-[10px] font-medium line-clamp-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{ach.description}</p>
-                                        </div>
-                                    </div>
-                                )) : (
-                                    <div className={`col-span-full py-6 text-center rounded-2xl border border-dashed flex flex-col items-center justify-center gap-2 ${theme === 'dark' ? 'bg-black/20 border-white/10' : 'bg-gray-50 border-gray-200'}`}>
-                                        <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center text-gray-600 mb-2">
-                                            <Lock size={20} />
-                                        </div>
-                                        <p className="text-xs font-bold text-gray-500">No achievements earned yet</p>
-                                        <p className="text-[10px] text-gray-400">Complete your first lesson to earn a badge!</p>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                     {renderContent()}
@@ -893,8 +929,15 @@ const DashboardCourseCard = ({ enrollment, theme }) => {
             {/* Image Area */}
             <div className="relative h-40 bg-gray-800 overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-[#0395B2]/20 to-[#A3D861]/20"></div>
-                <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md px-2 py-1 rounded text-xs font-bold text-white border border-white/10">
-                    {course.level || 'All Levels'}
+                <div className="absolute top-4 right-4 flex flex-col gap-2 items-end">
+                    <div className="bg-black/60 backdrop-blur-md px-2 py-1 rounded text-xs font-bold text-white border border-white/10">
+                        {course.level || 'All Levels'}
+                    </div>
+                    {enrollment.planType === 'Team' && (
+                        <div className="bg-[#A3D861] text-black px-2 py-1 rounded text-[10px] font-black uppercase tracking-tighter shadow-lg shadow-[#A3D861]/20">
+                            Team Plan
+                        </div>
+                    )}
                 </div>
             </div>
 

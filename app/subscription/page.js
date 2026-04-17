@@ -6,6 +6,20 @@ import { ChevronLeft, Check, Zap, Shield, Sparkles } from 'lucide-react';
 
 const SubscriptionPage = () => {
     const router = useRouter();
+    const [user, setUser] = React.useState(null);
+
+    React.useEffect(() => {
+        const stored = localStorage.getItem('user');
+        if (stored) {
+            try {
+                setUser(JSON.parse(stored));
+            } catch (e) {
+                console.error("Failed to parse user", e);
+            }
+        }
+    }, []);
+
+    const isTeamSubscriber = user?.enrolledCourses?.some(e => e.planType === 'Team');
 
     return (
         <div className="min-h-screen bg-[#020617] text-white font-sans selection:bg-[#A3D861]/30">
@@ -79,9 +93,9 @@ const SubscriptionPage = () => {
 
                         <button
                             className="mt-12 w-full py-4 bg-white text-black font-black rounded-2xl hover:bg-[#A3D861] transition-all hover:shadow-[0_0_30px_rgba(163,216,97,0.4)]"
-                            onClick={() => router.push('/payment')}
+                            onClick={() => router.push(isTeamSubscriber ? '/team-welcome' : '/team-plan')}
                         >
-                            Start Team Subscription
+                            {isTeamSubscriber ? 'View My Team' : 'Start Team Subscription'}
                         </button>
                     </div>
 
@@ -130,9 +144,9 @@ const SubscriptionPage = () => {
 
                         <button
                             className="mt-12 w-full py-4 bg-gradient-to-r from-[#0395B2] to-[#A3D861] text-black font-black rounded-2xl hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_0_30px_rgba(3,149,178,0.3)] relative z-10"
-                            onClick={() => router.push('/demo')}
+                            onClick={() => router.push('/enterprise')}
                         >
-                            Request Enterprise Demo
+                            Get Enterprise Inquiry
                         </button>
                     </div>
                 </div>

@@ -329,7 +329,7 @@ const CoursePage = () => {
 
                         const sections = [];
                         const usedCourseIds = new Set();
-                        const publishedCourses = allCourses.filter(c => c.status === 'Published');
+                        const publishedCourses = allCourses.filter(c => c.status === 'Published' && c.planType !== 'Team');
 
                         // Sort Function
                         const sortCourses = (a, b) => {
@@ -803,16 +803,25 @@ const CoursePage = () => {
                                         ) : (
                                             <div className="w-full space-y-3">
                                                 <button
-                                                    onClick={() => {
+                                                    onClick={async () => {
                                                         if (!user) {
                                                             router.push('/register');
                                                             return;
                                                         }
-                                                        router.push(`/payment?courseId=${courseData.id || courseData._id}`);
+                                                        
+                                                        const isTeamMember = user.enrolledCourses?.some(e => e.planType === 'Team');
+                                                        const isTeamEligible = selectedCourse.planType === 'Team' || selectedCourse.planType === 'Both';
+                                                        if (isTeamMember && isTeamEligible) {
+                                                            // For team members, enroll for free and go to classroom
+                                                            await handleEnroll(); 
+                                                            router.push(`/classroom?courseId=${selectedCourse.id || selectedCourse._id}`);
+                                                        } else {
+                                                            router.push(`/payment?courseId=${selectedCourse.id || selectedCourse._id}`);
+                                                        }
                                                     }}
                                                     className="w-full bg-[#A3D861] hover:bg-[#A3D861]/90 text-black font-black text-lg py-3 rounded-xl transition-all shadow-[0_4px_14px_0_rgba(163,216,97,0.39)] hover:shadow-[0_6px_20px_rgba(163,216,97,0.23)] active:scale-[0.98] cursor-pointer"
                                                 >
-                                                    Enroll Now
+                                                    {(user?.enrolledCourses?.some(e => e.planType === 'Team') && (selectedCourse.planType === 'Team' || selectedCourse.planType === 'Both')) ? 'Join with Team' : 'Enroll Now'}
                                                 </button>
                                             </div>
                                         )}

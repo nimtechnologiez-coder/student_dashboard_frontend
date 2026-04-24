@@ -1,4 +1,5 @@
 'use client';
+import LiveClassesSection from '../../components/dashboard/LiveClassesSection';
 
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -25,7 +26,8 @@ import {
     Menu,
     X,
     Flame,
-    Lock
+    Lock,
+    Video
 } from 'lucide-react';
 
 const StudentDashboardContent = () => {
@@ -39,6 +41,7 @@ const StudentDashboardContent = () => {
     const [activeTab, setActiveTab] = useState('courses');
     const [notifications, setNotifications] = useState([]);
     const [showNotifications, setShowNotifications] = useState(false);
+    const [availableCourses, setAvailableCourses] = useState([]);
     const [isSidebarOpen, setSidebarOpen] = useState(false);
 
     // Theme State
@@ -129,6 +132,26 @@ const StudentDashboardContent = () => {
                             time: 'Just now',
                             type: 'system'
                         });
+                    }
+                    
+                    // Fetch all available courses for Team Members to show catalog in dashboard
+                    if (data.enrolledCourses?.some(e => e.planType === 'Team')) {
+                        try {
+                            const coursesRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/courses`);
+                            if (coursesRes.ok) {
+                                const allCourses = await coursesRes.json();
+                                // Filter out courses the user is already enrolled in
+                                const enrolledIds = new Set(data.enrolledCourses.map(e => e.course?._id || e.course?.id).filter(Boolean));
+                                const available = allCourses.filter(c => 
+                                    c.status === 'Published' && 
+                                    (c.planType === 'Team' || c.planType === 'Both') &&
+                                    !enrolledIds.has(c._id) && !enrolledIds.has(c.id)
+                                );
+                                setAvailableCourses(available);
+                            }
+                        } catch (err) {
+                            console.error("Failed to fetch available courses for team member", err);
+                        }
                     }
 
                     // Check for expiring courses
@@ -255,7 +278,7 @@ const StudentDashboardContent = () => {
                                 </p>
                             </div>
                             <button 
-                                onClick={() => setActiveTab('courses')}
+                                onClick={() => setActiveTab('recorded')}
                                 className="px-8 py-4 bg-white text-black font-black rounded-2xl hover:scale-105 transition-all shadow-[0_10px_30px_rgba(255,255,255,0.1)]"
                             >
                                 Start Learning
@@ -345,22 +368,53 @@ const StudentDashboardContent = () => {
     };
 
     const renderMyLearning = () => (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {user.enrolledCourses && Array.isArray(user.enrolledCourses) && user.enrolledCourses.length > 0 ? (
-                user.enrolledCourses.map((enrollment, index) => (
-                    <DashboardCourseCard key={index} enrollment={enrollment} theme={theme} />
-                ))
-            ) : (
-                <div className={`col-span-full text-center py-20 border rounded-2xl ${theme === 'dark' ? 'bg-[#0a0f1a] border-white/5' : 'bg-white border-gray-200'}`}>
-                    <BookOpen size={48} className={`mx-auto mb-4 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} />
-                    <h3 className={`text-xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>No courses yet</h3>
-                    <p className={`mb-6 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Start your learning journey today.</p>
-                    <button
-                        onClick={() => router.push('/courses')}
-                        className="px-6 py-3 bg-[#A3D861] text-black font-bold rounded-xl hover:bg-[#A3D861]/90 transition-colors"
-                    >
-                        Browse Courses
-                    </button>
+        <div className="space-y-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                {enrolledCourses && enrolledCourses.length > 0 ? (
+                    enrolledCourses
+                        .filter(e => {
+                            const isTeamMember = enrolledCourses.some(ec => ec.planType === 'Team');
+                            if (!isTeamMember) return true; // Normal users see everything
+                            
+                            // Team members see Team cards OR courses officially marked as Team/Both
+                            const isGenericTeamCard = e.planType === 'Team' && !e.course;
+                            const coursePlanType = e.course?.planType || e.course?.plan_type;
+                            const isTeamCourse = e.course && (e.planType === 'Team' || coursePlanType === 'Team' || coursePlanType === 'Both');
+                            return isGenericTeamCard || isTeamCourse;
+                        })
+                        .map((enrollment, index) => (
+                            <DashboardCourseCard key={index} enrollment={enrollment} theme={theme} />
+                        ))
+                ) : (
+                    <div className={`col-span-full text-center py-20 border rounded-2xl ${theme === 'dark' ? 'bg-[#0a0f1a] border-white/5' : 'bg-white border-gray-200'}`}>
+                        <BookOpen size={48} className={`mx-auto mb-4 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} />
+                        <h3 className={`text-xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>No active enrollments</h3>
+                        <p className={`mb-6 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Start your learning journey today.</p>
+                    </div>
+                )}
+            </div>
+
+            {availableCourses.length > 0 && (
+                <div className="space-y-6">
+                    <div className="flex items-center gap-3 border-l-4 border-[#A3D861] pl-4">
+                        <h2 className={`text-2xl font-black ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Team Access Library</h2>
+                        <span className="bg-[#A3D861]/10 text-[#A3D861] text-xs px-2 py-1 rounded font-bold">ALL UNLOCKED</span>
+                    </div>
+                    <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>As a team member, you have free access to all these premium courses. Click any course to start learning immediately.</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                        {availableCourses.map((course, index) => (
+                            <DashboardCourseCard 
+                                key={`available-${index}`} 
+                                enrollment={{ 
+                                    course: course, 
+                                    progress: 0, 
+                                    planType: 'Team',
+                                    isSubscription: true
+                                }} 
+                                theme={theme} 
+                            />
+                        ))}
+                    </div>
                 </div>
             )}
         </div>
@@ -729,6 +783,8 @@ const StudentDashboardContent = () => {
         switch (activeTab) {
             case 'recorded':
                 return renderMyLearning();
+            case 'live-classes':
+                return <LiveClassesSection theme={theme} user={user} />;
             case 'certificates':
                 return renderCertificates();
             case 'profile':
@@ -777,6 +833,13 @@ const StudentDashboardContent = () => {
                         label="My Learning"
                         active={activeTab === 'recorded'}
                         onClick={() => { setActiveTab('recorded'); setSidebarOpen(false); }}
+                        theme={theme}
+                    />
+                    <NavItem
+                        icon={<Video size={20} />}
+                        label="Live Classes"
+                        active={activeTab === 'live-classes'}
+                        onClick={() => { setActiveTab('live-classes'); setSidebarOpen(false); }}
                         theme={theme}
                     />
                     <NavItem
@@ -920,7 +983,7 @@ const DashboardCourseCard = ({ enrollment, theme }) => {
     const course = enrollment.course;
 
     // Handle cases where course data might be missing (deleted course)
-    if (!course) return null;
+    if (!course && enrollment.planType !== 'Team') return null;
 
     const progress = enrollment.progress || 0;
 
@@ -928,10 +991,20 @@ const DashboardCourseCard = ({ enrollment, theme }) => {
         <div className={`border rounded-2xl overflow-hidden transition-all group ${theme === 'dark' ? 'bg-[#0a0f1a] border-white/10 hover:border-[#A3D861]/30' : 'bg-white border-gray-200 hover:border-[#A3D861] shadow-sm'}`}>
             {/* Image Area */}
             <div className="relative h-40 bg-gray-800 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#0395B2]/20 to-[#A3D861]/20"></div>
+                {course?.thumbnail ? (
+                    <img
+                        src={course.thumbnail}
+                        alt={course.title}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                ) : (
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#0395B2]/20 to-[#A3D861]/20 flex items-center justify-center">
+                        <Users size={48} className="text-white/20" />
+                    </div>
+                )}
                 <div className="absolute top-4 right-4 flex flex-col gap-2 items-end">
                     <div className="bg-black/60 backdrop-blur-md px-2 py-1 rounded text-xs font-bold text-white border border-white/10">
-                        {course.level || 'All Levels'}
+                        {course?.level || 'All Levels'}
                     </div>
                     {enrollment.planType === 'Team' && (
                         <div className="bg-[#A3D861] text-black px-2 py-1 rounded text-[10px] font-black uppercase tracking-tighter shadow-lg shadow-[#A3D861]/20">
@@ -943,10 +1016,10 @@ const DashboardCourseCard = ({ enrollment, theme }) => {
 
             <div className="p-5">
                 <h3 className={`text-lg font-bold mb-2 line-clamp-1 transition-colors ${theme === 'dark' ? 'text-white group-hover:text-[#A3D861]' : 'text-gray-900 group-hover:text-[#0395B2]'}`}>
-                    {course.title}
+                    {course ? course.title : 'Organization-Wide Subscription'}
                 </h3>
                 <div className="flex items-center gap-2 mb-4">
-                    {course.instructorImage && (
+                    {course?.instructorImage && (
                         <img
                             src={course.instructorImage}
                             alt={course.instructor}
@@ -954,7 +1027,7 @@ const DashboardCourseCard = ({ enrollment, theme }) => {
                         />
                     )}
                     <p className={`text-sm line-clamp-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                        {course.instructor}
+                        {course ? course.instructor : 'Nim Academy Team'}
                     </p>
                 </div>
 
@@ -1002,10 +1075,17 @@ const DashboardCourseCard = ({ enrollment, theme }) => {
                 })()}
 
                 <button
-                    onClick={() => router.push(`/classroom?courseId=${course.id || course._id}`)}
+                    onClick={() => {
+                        if (course) {
+                            router.push(`/classroom?courseId=${course.id || course._id}`);
+                        } else {
+                            // If it's a general team sub, maybe go to courses list or show a message
+                            router.push('/courses');
+                        }
+                    }}
                     className={`w-full py-3 rounded-xl border transition-all font-bold flex items-center justify-center gap-2 ${theme === 'dark' ? 'bg-white/5 border-white/10 hover:bg-[#A3D861] hover:text-black hover:border-[#A3D861]' : 'bg-gray-50 border-gray-200 hover:bg-[#A3D861] hover:text-black hover:border-[#A3D861]'}`}
                 >
-                    {progress > 0 ? 'Continue Learning' : 'Start Course'} <Play size={16} fill="currentColor" />
+                    {course ? (progress > 0 ? 'Continue Learning' : 'Start Course') : 'Browse All Courses'} <Play size={16} fill="currentColor" />
                 </button>
             </div>
         </div>

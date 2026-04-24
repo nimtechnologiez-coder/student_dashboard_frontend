@@ -19,6 +19,7 @@ const ClassroomContent = () => {
     const [activeModuleIndex, setActiveModuleIndex] = useState(0);
     const [activeLectureIndex, setActiveLectureIndex] = useState(0);
     const [completedLectures, setCompletedLectures] = useState([]);
+    const [isTeamMember, setIsTeamMember] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(true); // For mobile/desktop toggle
     const [videoUrlToPlay, setVideoUrlToPlay] = useState('');
 
@@ -100,21 +101,23 @@ const ClassroomContent = () => {
                 if (userRes.ok) {
                     userData = await userRes.json();
                     setUser(userData);
+                    setIsTeamMember(userData.enrolledCourses?.some(e => e.planType === 'Team') || false);
                 }
 
                 // 2. Check Enrollment
+                const isTeam = userData.enrolledCourses?.some(e => e.planType === 'Team');
                 const enrollment = userData.enrolledCourses?.find(e => {
-                    const eId = e.course._id || e.course.id || e.course;
+                    const eId = e.course?._id || e.course?.id || e.course;
                     return eId === courseId;
                 });
 
-                if (!enrollment) {
+                if (!enrollment && !isTeam) {
                     alert('You are not enrolled in this course.');
                     router.push(`/courses?courseId=${courseId}`);
                     return;
                 }
 
-                setCompletedLectures(enrollment.completedLectures || []);
+                setCompletedLectures(enrollment?.completedLectures || []);
 
                 // 3. Get Course Details
                 const courseRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/courses/${courseId}`);
@@ -170,6 +173,23 @@ const ClassroomContent = () => {
             }
         } catch (error) {
             console.error("Error marking complete:", error);
+            // If it failed because of enrollment, try auto-enrolling for team member
+            if (isTeamMember) {
+                 try {
+                     const token = localStorage.getItem('token');
+                     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/enroll`, {
+                         method: 'POST',
+                         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                         body: JSON.stringify({ userId: user.id || user._id, courseId: course.id || course._id, planType: 'Team' })
+                     });
+                     // Retry progress update once
+                     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/progress`, {
+                         method: 'POST',
+                         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                         body: JSON.stringify({ userId: user.id || user._id, courseId: course.id || course._id, lectureId: lectureId })
+                     });
+                 } catch (e) { console.error("Auto-enroll failed", e); }
+            }
         }
     };
 

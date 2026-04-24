@@ -53,8 +53,11 @@ const TeamPlanLandingPage = () => {
     }, []);
 
     const filteredCourses = courses.filter(c => 
-        c.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        c.category?.toLowerCase().includes(searchQuery.toLowerCase())
+        c.status === 'Published' && 
+        (c.planType === 'Team' || c.planType === 'Both') && (
+            c.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            c.category?.toLowerCase().includes(searchQuery.toLowerCase())
+        )
     );
 
     return (

@@ -775,7 +775,7 @@ const NewLandingPage = () => {
                                 More than 20 people - For your whole organization
                             </p>
                             {user?.enrolledCourses?.some(e => e.planType === 'Team') ? (
-                                <button className="outline-btn" onClick={() => router.push('/team-welcome')}>View My Team</button>
+                                <button className="outline-btn" onClick={() => router.push('/team-welcome')}>View Team Plan</button>
                             ) : (
                                 <button className="outline-btn" onClick={() => router.push('/team-plan')}>Start subscription</button>
                             )}
@@ -969,6 +969,7 @@ const NewLandingPage = () => {
                         >
                             Instructors
                         </button>
+
 
                         <button
                             className="join-btn secondary"
